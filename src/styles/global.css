@@ -618,6 +618,20 @@ html:not(.js) .intro, .intro.is-done { display: none; }
 @media (max-width: 960px) { .footer-office { grid-column: span 6; } }
 @media (max-width: 560px) { .footer-office { grid-column: 1 / -1; } }
 
+/* Version switch (v1 ↔ v2 comparison, see VersionSwitch.astro) */
+.footer-bottom { align-items: center; }
+.version-switch { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; max-width: 100%; }
+.version-switch__label { font-size: var(--fs-micro); font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-2); }
+.version-switch__options { display: inline-flex; gap: 2px; padding: 3px; border: var(--hair) solid var(--sage); border-radius: 50px; }
+.version-switch a {
+  display: inline-flex; align-items: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 50px;
+  font-size: 0.9375rem; white-space: nowrap; color: var(--sage-deep); transition: background-color 0.3s, color 0.3s;
+}
+@media (max-width: 359px) { .version-switch a { padding: 0 12px; } }
+.version-switch a b { font-weight: 600; }
+.version-switch a:hover { background: color-mix(in srgb, var(--sage) 14%, white); color: var(--sage-deep); }
+.version-switch a[aria-current='true'], .version-switch a[aria-current='true']:hover { background: var(--sage-deep); color: #fff; }
+
 /* ==========================================================================
    Search overlay (⌘K)
    ========================================================================== */

@@ -1,0 +1,58 @@
+---
+// Home hero — Figma "Hero 1": the alpine photograph with the white serif headline. On top, a WebGL layer
+// tells "model → reality": on first visit a generative relief rises from the valleys, then the photograph
+// replaces it from the valleys up; afterwards a surveyor's loupe shows the terrain model under the cursor.
+// Without WebGL, without JS or with reduced motion the photograph is simply shown, as in the design.
+// v2 adds the two calls to action and anchors the copy at the foot of the picture, where it is darkest.
+import Pill from './Pill.astro';
+import { getContent, href, type Locale } from '../i18n';
+import { photos, photoSrcSet } from '../data/photos';
+interface Props { lang: Locale }
+const { lang } = Astro.props;
+const c = getContent(lang);
+const hero = photos.hero;
+---
+<section class="hero" data-hero style={`--tone:${hero.tone}`}>
+  <img
+    class="hero__photo"
+    src={hero.src}
+    srcset={photoSrcSet('hero')}
+    sizes="100vw"
+    alt={hero.alt[lang]}
+    width={hero.w}
+    height={hero.h}
+    fetchpriority="high"
+    decoding="async"
+    data-hero-photo
+  />
+  <canvas class="hero__canvas" data-relief aria-hidden="true"></canvas>
+  <div class="hero__veil" aria-hidden="true"></div>
+  <div class="container hero__content">
+    <div class="grid">
+      <div class="hero__text">
+        <h1 class="h-hero hero__title" data-hero-title>{c.home.hero.title}</h1>
+        <p class="hero__sub" data-hero-sub>{c.home.hero.sub}</p>
+        <div class="pill-row hero__actions" data-hero-actions>
+          <Pill href="#enquiry" label={c.cta.contact} variant="white" size="lg" data-magnetic="" />
+          <Pill href={href(lang, 'expertise')} label={c.cta.expertise} variant="light" size="lg" />
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="hero__foot" data-hero-foot aria-hidden="true">
+    <div class="container hero__foot-inner">
+      <span class="scroll-cue meta"><span class="scroll-cue__line"></span>{c.ui.scroll}</span>
+      <div class="scalebar meta">
+        <div class="scalebar__bar"><span></span><span></span><span></span><span></span></div>
+        <div class="scalebar__labels"><span>0</span><span>500 m</span><span>1 km</span></div>
+        <span>{c.ui.scale}</span>
+        <span>{c.ui.reliefNote}</span>
+      </div>
+    </div>
+  </div>
+  <div class="readout" data-readout aria-hidden="true">
+    <span><b data-ro-e>2’681’200</b> E</span>
+    <span><b data-ro-n>1’224’300</b> N</span>
+    <span><b data-ro-h>1’842</b> {c.ui.elevation}</span>
+  </div>
+</section>

@@ -1,0 +1,38 @@
+---
+// "Kommende Veranstaltung" (Figma: PRS Academy / Lehrplan) with a live countdown. The button hands the
+// event to the enquiry form (on this page when it has one, otherwise on the contact page).
+import Media from './Media.astro';
+import Pill from './Pill.astro';
+import { getContent, href, type Locale } from '../i18n';
+interface Props { lang: Locale; formOnPage?: boolean; headingLevel?: 'h2' | 'h3' }
+const { lang, formOnPage = false, headingLevel: H = 'h2' } = Astro.props;
+const c = getContent(lang);
+const e = c.event;
+---
+<div class="event" id="event">
+  <div class="event__media"><Media art="geographer" lang={lang} ratio={1.18} sizes="(min-width: 1100px) 40vw, (min-width: 720px) 42vw, 94vw" /></div>
+  <div class="event__body">
+    <span class="rule" data-rule></span>
+    <p class="meta" style="margin-top:20px" data-reveal="fade">{e.label}</p>
+    <H class="event__title serif" data-reveal="lines">{e.title}</H>
+    <p class="event__date" data-reveal="fade"><time datetime={e.start.slice(0, 10)}>{e.date}</time></p>
+    <p class="body event__text" data-reveal="fade">{e.text}</p>
+    <p class="event__meta" data-reveal="fade">{e.meta.map((m) => <span>{m}</span>)}</p>
+    <p class="meta event__cd-label" data-cd-label>{c.ui.countdown.label}</p>
+    <div class="countdown" data-countdown data-start={e.start} data-end={e.end} role="timer" aria-live="off">
+      <div><b data-cd="d">–</b><span>{c.ui.countdown.days}</span></div>
+      <div><b data-cd="h">–</b><span>{c.ui.countdown.hours}</span></div>
+      <div><b data-cd="m">–</b><span>{c.ui.countdown.minutes}</span></div>
+    </div>
+    <p class="body" style="margin-top:26px" data-cd-running hidden>{c.ui.countdown.running}</p>
+    <div class="event__actions" data-reveal="fade">
+      <Pill
+        href={formOnPage ? '#enquiry' : href(lang, 'contact', 'enquiry')}
+        label={c.ui.request}
+        data-lead-add="event:upcoming"
+        data-lead-label={`${c.shortlist.requestEvent}: ${e.title}`}
+        data-lead-topic="academy"
+      />
+    </div>
+  </div>
+</div>

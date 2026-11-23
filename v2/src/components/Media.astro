@@ -1,0 +1,43 @@
+---
+// Painting frame with clip reveal, a conservator's loupe on hover (mouse only) and a museum label
+// (always visible on touch screens, on hover with a mouse). The files are self-hosted, see data/art.ts.
+import { art, artSrc, artSrcSet, artText, type ArtKey } from '../data/art';
+import type { Locale } from '../i18n';
+
+interface Props {
+  art: ArtKey;
+  lang: Locale;
+  ratio?: number;
+  loupe?: boolean;
+  sizes?: string;
+  eager?: boolean;
+  parallax?: boolean;
+}
+const { art: key, lang, ratio = 1.42, loupe = true, sizes = '(min-width: 960px) 33vw, (min-width: 640px) 50vw, 94vw', eager = false, parallax = false } = Astro.props;
+const a = art[key];
+const t = artText(key, lang);
+const alt = `${t.artist}, ${t.title}${t.year ? `, ${t.year}` : ''}`;
+---
+<figure
+  class:list={['media', { 'has-loupe': loupe }]}
+  style={`--ratio:${ratio};--focus:${a.focus};--tone:${a.tone}`}
+  data-reveal="media"
+  data-loupe={loupe ? artSrc(key, 1280) : undefined}
+  data-natural={`${a.w}x${a.h}`}
+>
+  <img
+    src={artSrc(key, 960)}
+    srcset={artSrcSet(key)}
+    sizes={sizes}
+    alt={alt}
+    width={a.w}
+    height={a.h}
+    loading={eager ? 'eager' : 'lazy'}
+    decoding="async"
+    data-parallax={parallax ? '' : undefined}
+  />
+  {loupe && <span class="loupe" aria-hidden="true"></span>}
+  <figcaption class="media__label">
+    {t.artist}, <i>{t.title}</i>{t.year && <>, {t.year}</>}
+  </figcaption>
+</figure>

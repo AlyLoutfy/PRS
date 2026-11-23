@@ -3,10 +3,13 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "description": "PRS Prime Re Solutions — website prototype built from the PRS_Rebranding Figma file.",
+  "description": "PRS Prime Re Solutions — website. v1 (current site, repository root) and v2 (redesign, ./v2) are built side by side for comparison.",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "dev:v2": "astro dev --root v2",
+    "build": "npm run build:v1 && npm run build:v2",
+    "build:v1": "astro build",
+    "build:v2": "astro build --root v2",
     "preview": "astro preview"
   },
   "dependencies": {

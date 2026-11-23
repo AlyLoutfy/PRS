@@ -1,0 +1,81 @@
+---
+// Expertise — Figma 03_Web Design / Expertise.
+import Base from '../../layouts/Base.astro';
+import PageHead from '../../components/PageHead.astro';
+import IntroRow from '../../components/IntroRow.astro';
+import Pill from '../../components/Pill.astro';
+import ArtCard from '../../components/ArtCard.astro';
+import Media from '../../components/Media.astro';
+import Illustration from '../../components/Illustration.astro';
+import ClientLogos from '../../components/ClientLogos.astro';
+import { getContent, href, staticLangPaths, type Locale } from '../../i18n';
+import type { ArtKey } from '../../data/art';
+
+export function getStaticPaths() {
+  return staticLangPaths();
+}
+const lang = Astro.params.lang as Locale;
+const c = getContent(lang);
+const e = c.expertise;
+---
+<Base lang={lang} page="expertise" title={e.title} description={e.intro.text} closing="form">
+  <PageHead title={e.title} index="01" section={c.nav.expertise} seed="expertise">
+    <IntroRow label={e.intro.label}>
+      <p class="lead" data-reveal="lines">{e.intro.text}</p>
+      <div data-reveal="fade"><Pill href="#services" label={e.intro.cta} variant="rust" /></div>
+    </IntroRow>
+  </PageHead>
+
+  <section class="section section--flush-top" id="services">
+    <div class="container grid trio trio--rows">
+      {e.services.map((s, i) => (
+        <ArtCard lang={lang} id={s.key} title={s.title} text={s.text} bullets={s.bullets}>
+          <div class="card__media" slot="media">
+            <Illustration kind={s.key as 'models' | 'products' | 'standards'} index={i + 1} lang={lang} label={s.text} />
+          </div>
+        </ArtCard>
+      ))}
+    </div>
+  </section>
+
+  <section class="section section--flush-top" id="approach">
+    <div class="container">
+      <IntroRow label={e.approach.label}>
+        <p class="lead" data-reveal="lines">{e.approach.text}</p>
+      </IntroRow>
+      <div class="grid duo duo--centered" style="margin-top:clamp(40px,6vw,104px)">
+        {e.approach.items.map((it) => (
+          <ArtCard lang={lang} title={it.title} text={it.text} art={it.art as ArtKey} ratio={1.36} />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--flush-top" id="academy">
+    <div class="container">
+      <IntroRow label={e.academy.label}>
+        <p class="lead" data-reveal="lines">{e.academy.text}</p>
+      </IntroRow>
+      <div class="grid feature feature--flip" style="margin-top:clamp(40px,6vw,104px)">
+        <div class="feature__text">
+          <span class="rule" data-rule></span>
+          <h3 class="h-card card__title" data-reveal="lines">{e.academy.card.title}</h3>
+          <p class="card__text" data-reveal="fade">{e.academy.card.text}</p>
+          <div class="card__cta" data-reveal="fade"><Pill href={href(lang, 'academy')} label={e.academy.card.cta} /></div>
+        </div>
+        <div class="feature__media">
+          <Media art="athens" lang={lang} sizes="(min-width: 960px) 46vw, 94vw" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--flush-top" id="clients">
+    <div class="container">
+      <IntroRow label={e.clients.label}>
+        <p class="lead" data-reveal="lines">{e.clients.text}</p>
+      </IntroRow>
+      <ClientLogos ruled />
+    </div>
+  </section>
+</Base>

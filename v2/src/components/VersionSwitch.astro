@@ -1,0 +1,30 @@
+---
+// Compare switch: the same page in the current site (v1, the project in the repository root) and in this
+// redesign (v2). Remove this component and its call in Footer.astro once one version has been chosen.
+import type { Locale } from '../i18n';
+import { V1_BASE } from '../lib/url';
+
+interface Props { lang: Locale }
+const { lang } = Astro.props;
+const labels = {
+  de: { group: 'Version', v1: 'Aktuell', v2: 'Redesign' },
+  en: { group: 'Version', v1: 'Current', v2: 'Redesign' },
+  es: { group: 'Versión', v1: 'Actual', v2: 'Rediseño' },
+}[lang];
+
+const BASE = import.meta.env.BASE_URL.replace(/\/$/, '');
+let rel = Astro.url.pathname;
+if (BASE && rel.startsWith(BASE)) rel = rel.slice(BASE.length);
+// Pages outside a language folder ("/", 404) lead to the other version's start page.
+if (!/^\/(de|en|es)(\/|$)/.test(rel)) rel = '/';
+else if (!rel.endsWith('/')) rel += '/';
+// With "astro dev" the two projects run on their own ports (npm run dev / npm run dev:v2).
+const v1Origin = import.meta.env.DEV ? 'http://127.0.0.1:4321' : '';
+---
+<nav class="version-switch" aria-label={labels.group}>
+  <span class="meta">{labels.group}</span>
+  <span class="version-switch__options">
+    <a href={`${v1Origin}${V1_BASE}${rel}`}><b>v1</b> {labels.v1}</a>
+    <a href={`${BASE}${rel}`} aria-current="true"><b>v2</b> {labels.v2}</a>
+  </span>
+</nav>

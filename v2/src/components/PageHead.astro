@@ -1,0 +1,24 @@
+---
+// Inner-page opener: index + large serif title over a faint, page-specific contour drawing
+// (the same cartographic motif as the home relief and the team portraits).
+import { contourSet } from '../lib/contours';
+interface Props {
+  title: string;
+  index: string;
+  section: string;
+  seed: string;
+}
+const { title, index, section, seed } = Astro.props;
+const set = contourSet(`page-${seed}`, 600, 13, 'light');
+---
+<header class="page-head">
+  <svg class="page-head__contours" viewBox="0 0 600 600" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
+    {set.lines.map((l) => <path d={l.d} class:list={{ idx: l.index }} data-draw-line />)}
+  </svg>
+  <div class="container page-head__inner">
+    <p class="meta page-head__index" data-reveal="fade"><span>{index}</span><span>{section}</span></p>
+    <h1 class="page-head__title" data-reveal="lines" data-reveal-now>{title}</h1>
+    <span class="rule page-head__rule" data-rule></span>
+    {Astro.slots.has('default') && <div class="page-head__body"><slot /></div>}
+  </div>
+</header>

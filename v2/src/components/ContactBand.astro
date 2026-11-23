@@ -1,0 +1,22 @@
+---
+// Slim closing call to action for pages that do not carry the full form.
+import Pill from './Pill.astro';
+import { getContent, href, type Locale } from '../i18n';
+import { contourSet } from '../lib/contours';
+interface Props { lang: Locale }
+const { lang } = Astro.props;
+const c = getContent(lang);
+const set = contourSet('band', 600, 11, 'light');
+---
+<section class="band" aria-labelledby="band-title">
+  <svg class="band__contours" viewBox="0 0 600 600" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
+    {set.lines.map((l) => <path d={l.d} class:list={{ idx: l.index }} data-draw-line />)}
+  </svg>
+  <div class="container band__inner">
+    <div>
+      <h2 class="band__title" id="band-title" data-reveal="lines">{c.band.title}</h2>
+      <p class="band__text" data-reveal="fade">{c.band.text}</p>
+    </div>
+    <div data-reveal="fade"><Pill href={href(lang, 'contact', 'enquiry')} label={c.cta.enquiry} variant="white" size="lg" data-magnetic="" /></div>
+  </div>
+</section>

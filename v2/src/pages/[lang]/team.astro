@@ -1,0 +1,90 @@
+---
+// Team — Figma 03_Web Design / Team, portraits exported from the file (Rebeca Juárez: monogram, no photo yet).
+// The Figma note on this frame reads "Auto Rotation of Names": within each country the order rotates by
+// one place per day, so no one is always listed first. Remove `data-rotate` from the grid to switch it off.
+import Base from '../../layouts/Base.astro';
+import PageHead from '../../components/PageHead.astro';
+import IntroRow from '../../components/IntroRow.astro';
+import { getContent, staticLangPaths, type Locale } from '../../i18n';
+import { team, personTitle, personRole, initials, type CountryKey } from '../../data/team';
+import { contourSet } from '../../lib/contours';
+import { withBase } from '../../lib/url';
+
+export function getStaticPaths() {
+  return staticLangPaths();
+}
+const lang = Astro.params.lang as Locale;
+const c = getContent(lang);
+const countries: CountryKey[] = ['ch', 'pe', 'mx', 'si', 'ec'];
+const slug = (s: string) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+// Soft hyphens keep long German compounds inside narrow columns on every browser.
+const shy = (s: string) => s.replace('Verwaltungsratspräsident', 'Verwaltungsrats­präsident').replace('Geschäftsführer', 'Geschäfts­führer');
+---
+<Base lang={lang} page="team" title={c.team.title} description={c.team.text}>
+  <PageHead title={c.team.title} index="05" section={c.nav.about} seed="team">
+    <IntroRow label={c.team.label}>
+      <p class="lead" data-reveal="lines">{c.team.text}</p>
+    </IntroRow>
+  </PageHead>
+
+  <section class="section section--flush-top" data-filter-root>
+    <div class="container">
+      <div class="chips" role="group" aria-label={c.team.label} data-reveal="fade">
+        <button class="chip" type="button" data-filter="country" data-value="all" aria-pressed="true">{c.ui.all} <span class="chip__count">{team.length}</span></button>
+        {countries.map((k) => (
+          <button class="chip" type="button" data-filter="country" data-value={k} aria-pressed="false">
+            {c.ui.countries[k]} <span class="chip__count">{team.filter((p) => p.country === k).length}</span>
+          </button>
+        ))}
+      </div>
+      <div class="grid team" data-filter-grid data-rotate>
+        {team.map((p) => {
+          const set = contourSet(p.name, 300, 10);
+          return (
+            <article class="person" id={slug(p.name)} data-filter-item data-country={p.country}>
+              <div class="person__portrait" data-reveal="media">
+                {p.photo ? (
+                  <img src={withBase(`/team/${p.photo}.webp`)} width="720" height="720" alt={p.name} loading="lazy" decoding="async" sizes="(min-width: 1024px) 24vw, (min-width: 640px) 32vw, 46vw" />
+                ) : (
+                  <>
+                    <svg viewBox="0 0 300 300" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+                      {set.lines.map((l) => (
+                        <path d={l.d} fill="none" stroke={l.index ? 'var(--blue)' : 'var(--ink)'} stroke-opacity={l.index ? 0.35 : 0.13} stroke-width="1" />
+                      ))}
+                      <circle cx={set.peak[0]} cy={set.peak[1]} r="2.2" fill="var(--rust)" />
+                    </svg>
+                    <span class="person__initials" aria-hidden="true">{initials(p.name)}</span>
+                  </>
+                )}
+              </div>
+              <h2 class="person__name">{p.name}</h2>
+              <p class="person__role">
+                {personTitle(p, lang)}<br />{shy(personRole(p, lang))}<br />{c.ui.countries[p.country]}
+              </p>
+            </article>
+          );
+        })}
+      </div>
+      <script is:inline>
+        // Daily rotation within each country group (runs before first paint, no layout jump).
+        (function () {
+          var grid = document.querySelector('[data-rotate]');
+          if (!grid) return;
+          var day = Math.floor(Date.now() / 864e5);
+          var groups = {};
+          var order = [];
+          Array.prototype.forEach.call(grid.children, function (el) {
+            var k = el.getAttribute('data-country');
+            if (!groups[k]) { groups[k] = []; order.push(k); }
+            groups[k].push(el);
+          });
+          order.forEach(function (k) {
+            var list = groups[k];
+            var shift = day % list.length;
+            list.slice(shift).concat(list.slice(0, shift)).forEach(function (el) { grid.appendChild(el); });
+          });
+        })();
+      </script>
+    </div>
+  </section>
+</Base>

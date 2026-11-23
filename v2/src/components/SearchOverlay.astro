@@ -1,0 +1,71 @@
+---
+// ⌘K / "/" search across pages, curriculum topics and team members. The index is built at compile time.
+// Full-screen sheet on phones, a centred panel from tablets up.
+import { getContent, href, type Locale, type PageSlug } from '../i18n';
+import { courses } from '../data/courses';
+import { team, personTitle, personRole } from '../data/team';
+
+interface Props { lang: Locale }
+const { lang } = Astro.props;
+const c = getContent(lang);
+
+type Entry = { g: 'pages' | 'courses' | 'people'; t: string; d: string; u: string; m?: string };
+const pages: [PageSlug, string, string][] = [
+  ['', c.ui.home, c.home.hero.title],
+  ['expertise', c.expertise.title, c.expertise.intro.text],
+  ['academy', c.academy.title, c.academy.intro.text],
+  ['curriculum', c.curriculum.title, c.curriculum.text],
+  ['about', c.about.title, c.about.intro.text],
+  ['team', c.team.title, c.team.text],
+  ['news', c.news.title, c.news.text],
+  ['contact', c.contact.title, c.contact.text],
+];
+const index: Entry[] = [
+  ...pages.map(([slug, t, d]) => ({ g: 'pages' as const, t, d, u: href(lang, slug) })),
+  ...c.expertise.services.map((s) => ({ g: 'pages' as const, t: s.title, d: `${s.text} ${s.bullets.join(' · ')}`, u: href(lang, 'expertise', 'services'), m: c.expertise.title })),
+  ...courses.map((k) => ({
+    g: 'courses' as const,
+    t: k.title[lang],
+    d: k.text[lang],
+    u: href(lang, 'curriculum', k.id),
+    m: `${c.ui.format[k.format]} · ${k.hours} ${c.ui.format.hours}`,
+  })),
+  ...team.map((p) => ({
+    g: 'people' as const,
+    t: p.name,
+    d: `${personTitle(p, lang)} · ${personRole(p, lang)}`,
+    u: href(lang, 'team'),
+    m: c.ui.countries[p.country],
+  })),
+];
+---
+<div class="search" data-search role="dialog" aria-modal="true" aria-label={c.ui.search}>
+  <div class="search__scrim" data-search-close></div>
+  <div class="search__panel" data-search-panel>
+    <div class="search__field">
+      <svg viewBox="0 0 18 18" aria-hidden="true"><circle cx="7.6" cy="7.6" r="5.6" fill="none" stroke="currentColor" stroke-width="1.4" /><path d="M11.8 11.8 16.5 16.5" stroke="currentColor" stroke-width="1.4" /></svg>
+      <input
+        type="search"
+        placeholder={c.ui.searchPlaceholder}
+        aria-label={c.ui.search}
+        aria-controls="search-results"
+        aria-autocomplete="list"
+        role="combobox"
+        aria-expanded="true"
+        autocomplete="off"
+        autocapitalize="none"
+        spellcheck="false"
+        enterkeyhint="search"
+        data-search-input
+      />
+      <button class="icon-btn search__close" type="button" data-search-close aria-label={c.ui.close}>
+        <svg viewBox="0 0 18 18" aria-hidden="true"><path d="M4 4l10 10M14 4 4 14" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" /></svg>
+      </button>
+    </div>
+    <div class="search__results" id="search-results" role="listbox" aria-label={c.ui.search} data-search-results data-lenis-prevent></div>
+    <div class="search__foot" aria-hidden="true">
+      <span><span class="kbd">↑</span> <span class="kbd">↓</span> {c.ui.searchKeys.move}</span><span><span class="kbd">↵</span> {c.ui.searchKeys.open}</span><span><span class="kbd">Esc</span> {c.ui.searchKeys.close}</span>
+    </div>
+  </div>
+  <script type="application/json" data-search-index set:html={JSON.stringify({ groups: c.ui.groups, empty: c.ui.searchEmpty, items: index }).replace(/</g, '\\u003c')} />
+</div>

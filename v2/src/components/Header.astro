@@ -1,0 +1,93 @@
+---
+// Floating header bar + the full menu (Figma: 03_Web Design / Navigation and Drop-down Menu).
+// Desktop shows the four main destinations and a contact button; below 1024 px they live in the menu.
+import Logo from './Logo.astro';
+import Pill from './Pill.astro';
+import { getContent, href, locales, type Locale, type PageSlug } from '../i18n';
+import { offices, EMAIL, telHref } from '../data/offices';
+
+interface Props {
+  lang: Locale;
+  page: PageSlug;
+}
+const { lang, page } = Astro.props;
+const c = getContent(lang);
+const hq = offices[0];
+const nav: { slug: PageSlug; label: string; group: PageSlug[] }[] = [
+  { slug: 'expertise', label: c.nav.expertise, group: ['expertise'] },
+  { slug: 'academy', label: c.menu.academy, group: ['academy', 'curriculum'] },
+  { slug: 'team', label: c.menu.team, group: ['team'] },
+  { slug: 'about', label: c.nav.about, group: ['about', 'news'] },
+];
+---
+<header class="site-header" data-header>
+  <div class="site-header__bar">
+    <a class="logo" href={href(lang)} aria-label={`PRS Prime Re Solutions – ${c.ui.home}`}>
+      <Logo />
+    </a>
+
+    <nav class="nav-primary" aria-label={c.menu.primary}>
+      {nav.map((item) => (
+        <a href={href(lang, item.slug)} aria-current={item.group.includes(page) ? 'page' : undefined}>{item.label}</a>
+      ))}
+    </nav>
+
+    <div class="header-tools">
+      <nav class="lang-switch lang-switch--bar" aria-label={c.ui.language}>
+        {locales.map((l) => (
+          <a href={href(l, page)} hreflang={l} lang={l} aria-current={l === lang ? 'true' : undefined} title={getContent(l).name}>{l.toUpperCase()}</a>
+        ))}
+      </nav>
+      <button class="icon-btn" type="button" data-search-open aria-label={c.ui.searchOpen} aria-haspopup="dialog" aria-keyshortcuts="Control+K Meta+K">
+        <svg viewBox="0 0 18 18" aria-hidden="true"><circle cx="7.6" cy="7.6" r="5.6" fill="none" stroke="currentColor" stroke-width="1.4" /><path d="M11.8 11.8 16.5 16.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" /></svg>
+      </button>
+      <Pill href={href(lang, 'contact')} label={c.cta.contactShort} variant="solid" size="sm" arrow={false} class="header-cta" data-magnetic="" />
+      <button class="icon-btn menu-btn" type="button" data-menu-toggle aria-expanded="false" aria-controls="menu" data-label-open={c.menu.open} data-label-close={c.menu.close} aria-label={c.menu.open}>
+        <span class="menu-btn__lines" aria-hidden="true"><i></i><i></i></span>
+      </button>
+    </div>
+    <span class="site-header__progress" data-progress aria-hidden="true"></span>
+  </div>
+</header>
+
+<div class="menu" id="menu" data-menu inert>
+  <div class="menu__scrim" data-menu-close></div>
+  <div class="menu__panel" data-menu-panel data-lenis-prevent role="dialog" aria-modal="true" aria-label={c.ui.menu}>
+    <div class="menu__inner">
+      <div class="menu__cols">
+        {c.nav.mega.map((group) => (
+          <div class="menu__col" data-menu-col>
+            <span class="rule" data-menu-rule></span>
+            <p class="menu__col-title" data-menu-item><a href={href(lang, group.page as PageSlug)}>{group.title}</a></p>
+            {group.links.length > 0 ? (
+              <ul class="menu__links">
+                {group.links.map((l) => (
+                  <li data-menu-item><a href={href(lang, l.page as PageSlug, 'hash' in l ? (l as { hash?: string }).hash : undefined)}>{l.label}</a></li>
+                ))}
+              </ul>
+            ) : (
+              <>
+                <ul class="menu__links menu__links--contact">
+                  <li data-menu-item><a href={`mailto:${EMAIL}`}>{EMAIL}</a></li>
+                  <li data-menu-item><a href={telHref(hq.phone)}>T {hq.phone}</a></li>
+                  <li data-menu-item><span>{hq.address?.slice(1).join(', ')}</span></li>
+                </ul>
+                <div class="menu__cta" data-menu-item>
+                  <Pill href={href(lang, 'contact')} label={c.cta.enquiry} variant="solid" />
+                </div>
+              </>
+            )}
+          </div>
+        ))}
+      </div>
+      <div class="menu__footer" data-menu-item>
+        <nav class="lang-switch" aria-label={c.ui.language}>
+          {locales.map((l) => (
+            <a href={href(l, page)} hreflang={l} lang={l} aria-current={l === lang ? 'true' : undefined}>{getContent(l).name}</a>
+          ))}
+        </nav>
+        <span>{c.footer.copyright}</span>
+      </div>
+    </div>
+  </div>
+</div>

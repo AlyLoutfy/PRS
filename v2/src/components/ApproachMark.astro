@@ -1,0 +1,29 @@
+---
+// Line graphics for "Unsere Arbeitsweise", drawn for v2 (Figma note on the homepage: "Neue Grafiken
+// zeichnen" — the frame still carries placeholder icons). They keep the idea of the placeholders:
+//  practice → one vessel of knowledge, filled level by level
+//  shared   → the same vessel passed on: a second one fills from the first
+interface Props { kind: 'practice' | 'shared'; label: string }
+const { kind, label } = Astro.props;
+---
+<div class="mark" data-draw role="img" aria-label={label}>
+  {kind === 'practice' ? (
+    <svg viewBox="0 0 64 64" width="64" height="64">
+      <ellipse cx="32" cy="12" rx="20" ry="7" data-draw-path />
+      <path d="M12 12v40c0 3.9 9 7 20 7s20-3.1 20-7V12" data-draw-path />
+      <path class="mark__soft" d="M12 25.3c0 3.9 9 7 20 7s20-3.1 20-7" data-draw-path />
+      <path class="mark__soft" d="M12 38.6c0 3.9 9 7 20 7s20-3.1 20-7" data-draw-path />
+    </svg>
+  ) : (
+    <svg viewBox="0 0 132 64" width="132" height="64">
+      <ellipse cx="26" cy="12" rx="16" ry="6" data-draw-path />
+      <path d="M10 12v40c0 3.3 7.2 6 16 6s16-2.7 16-6V12" data-draw-path />
+      <path class="mark__soft" d="M10 32c0 3.3 7.2 6 16 6s16-2.7 16-6" data-draw-path />
+      <path d="M50 32h30M74 26l6 6-6 6" data-draw-path />
+      <ellipse cx="106" cy="12" rx="16" ry="6" data-draw-path />
+      <path d="M90 12v40c0 3.3 7.2 6 16 6s16-2.7 16-6V12" data-draw-path />
+      <path class="mark__soft" d="M90 32c0 3.3 7.2 6 16 6s16-2.7 16-6" data-draw-path />
+      <circle class="mark__dot" cx="50" cy="32" r="2.4" data-mark-dot />
+    </svg>
+  )}
+</div>

@@ -1,0 +1,25 @@
+---
+// Contact — Figma 03_Web Design / Kontakt (the four offices). v2 leads with the enquiry form, followed by
+// the offices on an interactive globe.
+import Base from '../../layouts/Base.astro';
+import PageHead from '../../components/PageHead.astro';
+import LeadSection from '../../components/LeadSection.astro';
+import Globe from '../../components/Globe.astro';
+import { getContent, staticLangPaths, type Locale } from '../../i18n';
+
+export function getStaticPaths() {
+  return staticLangPaths();
+}
+const lang = Astro.params.lang as Locale;
+const c = getContent(lang);
+---
+<Base lang={lang} page="contact" title={c.contact.title} description={c.contact.text} closing="none" toast={false}>
+  <PageHead title={c.contact.title} index="07" section={c.nav.contact} seed="contact" />
+  <LeadSection lang={lang} tone="paper" eyebrow={false} flushTop />
+  <section class="section" id="offices" aria-labelledby="offices-title">
+    <div class="container">
+      <h2 class="h-section section-title" id="offices-title" data-reveal="lines">{c.sections.offices}</h2>
+      <Globe lang={lang} />
+    </div>
+  </section>
+</Base>

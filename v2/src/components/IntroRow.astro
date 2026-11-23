@@ -1,0 +1,15 @@
+---
+// The recurring editorial pattern from the Figma pages: small label on the left, lead text on the right.
+interface Props {
+  label: string;
+  id?: string;
+  as?: 'h1' | 'h2' | 'p';
+}
+const { label, id, as: Tag = 'h2' } = Astro.props;
+---
+<div class="grid intro-row" id={id}>
+  <Tag class="label intro-row__label" data-reveal="fade">{label}</Tag>
+  <div class="intro-row__body">
+    <slot />
+  </div>
+</div>

@@ -1,0 +1,117 @@
+---
+// Curriculum ("Lehrplan") — Figma 03_Web Design / Lehrplan. v2: sticky filters, topics can be collected
+// into one enquiry ("einzeln oder kombiniert"), and the page ends with the two blocks the Figma note on
+// this frame asks for: "Kundenstimmen" and "Allgemeine Anfrage".
+import Base from '../../layouts/Base.astro';
+import PageHead from '../../components/PageHead.astro';
+import IntroRow from '../../components/IntroRow.astro';
+import EventCard from '../../components/EventCard.astro';
+import Testimonials from '../../components/Testimonials.astro';
+import { getContent, staticLangPaths, type Locale } from '../../i18n';
+import { courses, type CourseCategory } from '../../data/courses';
+
+export function getStaticPaths() {
+  return staticLangPaths();
+}
+const lang = Astro.params.lang as Locale;
+const c = getContent(lang);
+const cats: CourseCategory[] = ['modelling', 'solvency', 'reserving', 'reinsurance'];
+const count = (cat: CourseCategory) => courses.filter((k) => k.category === cat).length;
+---
+<Base lang={lang} page="curriculum" title={c.curriculum.title} description={c.curriculum.text} closing="form-academy" toast={false}>
+  <PageHead title={c.curriculum.title} index="03" section="PRS Academy" seed="curriculum">
+    <IntroRow label={c.curriculum.label}>
+      <p class="lead" data-reveal="lines">{c.curriculum.text}</p>
+    </IntroRow>
+  </PageHead>
+
+  <section class="section section--flush-top" data-filter-root>
+    <div class="filterbar" data-filterbar>
+      <div class="container filters">
+        <div class="filters__groups">
+          <div class="chips" role="group" aria-label={c.shortlist.area}>
+            <button class="chip" type="button" data-filter="category" data-value="all" aria-pressed="true">{c.ui.all} <span class="chip__count">{courses.length}</span></button>
+            {cats.map((cat) => (
+              <button class="chip" type="button" data-filter="category" data-value={cat} aria-pressed="false">
+                {c.ui.categories[cat]} <span class="chip__count">{count(cat)}</span>
+              </button>
+            ))}
+          </div>
+          <div class="chips" role="group" aria-label={c.shortlist.format}>
+            <button class="chip" type="button" data-filter="format" data-value="all" aria-pressed="true">{c.ui.all}</button>
+            <button class="chip" type="button" data-filter="format" data-value="workshop" aria-pressed="false">{c.ui.format.workshop} <span class="chip__count">16 h</span></button>
+            <button class="chip" type="button" data-filter="format" data-value="seminar" aria-pressed="false">{c.ui.format.seminar} <span class="chip__count">3 h</span></button>
+          </div>
+        </div>
+        <label class="filter-search">
+          <svg viewBox="0 0 18 18" aria-hidden="true"><circle cx="7.6" cy="7.6" r="5.6" fill="none" stroke="currentColor" stroke-width="1.4" /><path d="M11.8 11.8 16.5 16.5" stroke="currentColor" stroke-width="1.4" /></svg>
+          <span class="sr-only">{c.ui.filterSearch}</span>
+          <input type="search" placeholder={c.ui.filterSearch} data-filter-text autocomplete="off" enterkeyhint="search" />
+        </label>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="filters__meta">
+        <p class="meta" aria-live="polite" data-filter-count data-one={c.ui.topicOne} data-many={c.ui.topicMany}>
+          {courses.length} {c.ui.topicMany}
+        </p>
+        <button class="link-btn" type="button" data-filter-reset hidden>{c.shortlist.reset}</button>
+      </div>
+      <div class="grid courses" data-filter-grid>
+        {courses.map((k) => (
+          <article class="course" id={k.id} data-filter-item data-category={k.category} data-format={k.format}>
+            <span class="rule" data-rule></span>
+            <h2 class="h-card">{k.title[lang]}</h2>
+            <p class="course__meta">
+              <span>{c.ui.format[k.format]}</span><i></i><span>{k.hours} {c.ui.format.hours}</span><i></i>
+              <span class="course__tag">{c.ui.categories[k.category]}</span>
+            </p>
+            <p class="course__text">{k.text[lang]}</p>
+            <div class="course__actions">
+              <button
+                class="pill pill--sm add-btn"
+                type="button"
+                aria-pressed="false"
+                data-course-add={`course:${k.id}`}
+                data-lead-label={k.title[lang]}
+                data-label-add={c.shortlist.add}
+                data-label-added={c.shortlist.added}
+              >
+                <span class="add-btn__icon" aria-hidden="true"></span>
+                <span data-add-label>{c.shortlist.add}</span>
+              </button>
+            </div>
+          </article>
+        ))}
+        <p class="courses-empty" data-filter-empty hidden>{c.ui.noCourses}</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--flush-top">
+    <div class="container"><EventCard lang={lang} formOnPage /></div>
+  </section>
+
+  <section class="section section--flush-top" id="voices">
+    <div class="container">
+      <h2 class="h-section section-title" data-reveal="lines">{c.sections.voices}</h2>
+      <Testimonials lang={lang} />
+    </div>
+  </section>
+
+  <div class="shortlist-bar" data-shortlist-bar aria-live="polite">
+    <div class="shortlist-bar__inner">
+      <p class="shortlist-bar__count"><b data-shortlist-count>0</b> <span data-shortlist-label data-one={c.shortlist.one} data-many={c.shortlist.many}>{c.shortlist.many}</span></p>
+      <div class="shortlist-bar__actions">
+        <a class="pill pill--sm pill--white" href="#enquiry" data-shortlist-send>
+          <span>{c.shortlist.send}</span>
+          <svg class="pill__arrow" viewBox="0 0 14 14" aria-hidden="true"><path d="M1 7h11M8 3l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.3" /></svg>
+        </a>
+        <button class="icon-btn" type="button" data-shortlist-clear aria-label={c.shortlist.clear}>
+          <svg viewBox="0 0 18 18" aria-hidden="true"><path d="M4 4l10 10M14 4 4 14" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" /></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</Base>

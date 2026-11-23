@@ -1,0 +1,49 @@
+---
+// Closing "let's talk" section with the enquiry form. `context="academy"` is used on the Academy and
+// curriculum pages (Figma note on the Lehrplan frame: "Allgemeine Anfrage").
+import LeadForm from './LeadForm.astro';
+import { getContent, type Locale } from '../i18n';
+import { offices, EMAIL, telHref } from '../data/offices';
+import { contourSet } from '../lib/contours';
+
+interface Props {
+  lang: Locale;
+  context?: 'general' | 'academy';
+  tone?: 'ink' | 'paper';
+  id?: string;
+  /** small label above the title (off on the contact page, where the page title already says it) */
+  eyebrow?: boolean;
+  flushTop?: boolean;
+}
+const { lang, context = 'general', tone = 'ink', id = 'enquiry', eyebrow = true, flushTop = false } = Astro.props;
+const c = getContent(lang);
+const hq = offices[0];
+const academy = context === 'academy';
+const set = contourSet(`lead-${context}`, 600, 11, 'light');
+---
+<section class:list={['section', 'lead-section', { 'section--ink': tone === 'ink', 'section--flush-top': flushTop }]} id={id} aria-labelledby={`${id}-title`} data-lead-section>
+  <svg class="lead-section__contours" viewBox="0 0 600 600" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
+    {set.lines.map((l) => <path d={l.d} class:list={{ idx: l.index }} data-draw-line />)}
+  </svg>
+  <div class="container grid lead-grid">
+    <div class="lead-intro">
+      {eyebrow && <p class="meta" style="margin-bottom:18px" data-reveal="fade">{academy ? c.sections.enquiry : c.lead.eyebrow}</p>}
+      <h2 class="h-section" id={`${id}-title`} data-reveal="lines">{academy ? c.lead.academyTitle : c.lead.title}</h2>
+      <p class="lead" data-reveal="fade">{academy ? c.lead.academyText : c.lead.text}</p>
+      <div class="lead-direct" data-reveal="fade">
+        <span class="meta lead-direct__label">{c.lead.direct}</span>
+        <a href={`mailto:${EMAIL}`}><span class="tlink">{EMAIL}</span></a>
+        <a href={telHref(hq.phone)}><span class="tlink">T {hq.phone}</span></a>
+      </div>
+    </div>
+    <div class="lead-form-wrap" data-reveal="fade">
+      <LeadForm lang={lang} topic={academy ? 'academy' : 'general'} light={tone !== 'ink'} />
+    </div>
+    {/* The same two lines again for phones, where they belong after the form. */}
+    <div class="lead-direct" data-reveal="fade">
+      <span class="meta lead-direct__label">{c.lead.direct}</span>
+      <a href={`mailto:${EMAIL}`}><span class="tlink">{EMAIL}</span></a>
+      <a href={telHref(hq.phone)}><span class="tlink">T {hq.phone}</span></a>
+    </div>
+  </div>
+</section>

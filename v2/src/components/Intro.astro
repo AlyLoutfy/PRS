@@ -1,0 +1,21 @@
+---
+// First-visit intro: the two bars of the PRS mark slide together, then the wordmark wipes in.
+import Logo from './Logo.astro';
+import { getContent, type Locale } from '../i18n';
+interface Props { lang: Locale }
+const c = getContent(Astro.props.lang);
+---
+<div class="intro" data-intro aria-hidden="true">
+  <div class="intro__logo"><Logo layered /></div>
+  <div class="intro__meta meta"><span>{c.ui.introPlace}</span><span>{c.ui.introSince}</span></div>
+</div>
+<script is:inline>
+  (function () {
+    var el = document.currentScript && document.currentScript.previousElementSibling;
+    var seen = false;
+    try { seen = sessionStorage.getItem('prs-intro') === '1'; } catch (e) {}
+    var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    // Skip the intro on repeat visits, with reduced motion, and when the visitor arrives on an anchor.
+    if (el && (seen || reduced || location.hash.length > 1)) el.classList.add('is-done');
+  })();
+</script>

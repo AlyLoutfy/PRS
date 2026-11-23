@@ -1,0 +1,22 @@
+---
+// The PRS logo artwork exported from Figma (public/brand/prs-logo-1024.png, single colour #006FB5), used as a
+// CSS mask so it can be recoloured (blue on light, white on the hero). The mark is a square occupying the
+// left 36.18 % of the artwork; split along its anti-diagonal (the gap between the two bars) it yields the
+// two bars animated by the first-visit intro.
+interface Props {
+  title?: string;
+  layered?: boolean;
+}
+const { title = 'PRS Prime Re Solutions', layered = false } = Astro.props;
+---
+<span class="logo-art" role="img" aria-label={title}>
+  {layered ? (
+    <>
+      <span class="logo-art__layer logo-art__a"></span>
+      <span class="logo-art__layer logo-art__b"></span>
+      <span class="logo-art__layer logo-art__word"></span>
+    </>
+  ) : (
+    <span class="logo-art__layer"></span>
+  )}
+</span>

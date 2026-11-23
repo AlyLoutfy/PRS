@@ -1,6 +1,7 @@
 ---
 import { getContent, href, type Locale } from '../i18n';
 import { offices, EMAIL, telHref } from '../data/offices';
+import VersionSwitch from './VersionSwitch.astro';
 
 interface Props { lang: Locale }
 const { lang } = Astro.props;
@@ -22,6 +23,7 @@ const c = getContent(lang);
     </div>
     <div class="footer-bottom">
       <span>{c.footer.copyright}</span>
+      <VersionSwitch lang={lang} />
       <nav aria-label="Legal">
         <a href={href(lang, 'legal', 'imprint')}>{c.footer.imprint}</a>
         <a href={href(lang, 'legal', 'privacy')}>{c.footer.privacy}</a>

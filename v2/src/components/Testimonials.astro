@@ -1,0 +1,26 @@
+---
+// Figma "Unsere Kunden" (677:56): quotes with attribution under a hairline, sage arrow buttons.
+// A snap carousel on every screen: three quotes side by side on desktop, two on tablets, one on phones;
+// the arrows only appear when there is something to scroll to.
+import { getContent, type Locale } from '../i18n';
+interface Props { lang: Locale; label?: string }
+const { lang, label } = Astro.props;
+const c = getContent(lang);
+---
+<div class="quotes" data-quotes tabindex="0" role="group" aria-roledescription="carousel" aria-label={label ?? c.sections.voices}>
+  {c.testimonials.map((t) => (
+    <figure class="quote" data-reveal="fade">
+      <blockquote class="quote__text">{c.quotes.open}{t.quote}{c.quotes.close}</blockquote>
+      <figcaption class="quote__who"><b>{t.name}</b>{t.role}</figcaption>
+    </figure>
+  ))}
+</div>
+<div class="quotes-nav" data-quotes-nav hidden>
+  <button class="round-btn" type="button" data-quotes-prev aria-label={c.ui.prev}>
+    <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5" fill="none" stroke="currentColor" stroke-width="1.3" /></svg>
+  </button>
+  <span class="meta quotes-nav__count tnum" data-quotes-count aria-hidden="true"></span>
+  <button class="round-btn" type="button" data-quotes-next aria-label={c.ui.next}>
+    <svg viewBox="0 0 16 16" aria-hidden="true"><path d="m6 3 5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.3" /></svg>
+  </button>
+</div>

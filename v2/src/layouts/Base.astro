@@ -1,0 +1,90 @@
+---
+import '@fontsource-variable/inter';
+import '@fontsource-variable/crimson-pro';
+import '../styles/global.css';
+import interLatin from '@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url';
+import crimsonLatin from '@fontsource-variable/crimson-pro/files/crimson-pro-latin-wght-normal.woff2?url';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import SearchOverlay from '../components/SearchOverlay.astro';
+import Intro from '../components/Intro.astro';
+import LeadSection from '../components/LeadSection.astro';
+import ContactBand from '../components/ContactBand.astro';
+import EventToast from '../components/EventToast.astro';
+import { getContent, href, locales, type Locale, type PageSlug } from '../i18n';
+import { withBase } from '../lib/url';
+
+interface Props {
+  lang: Locale;
+  page: PageSlug;
+  title: string;
+  description?: string;
+  intro?: boolean;
+  /** how the page ends: the enquiry form, a slim call to action, or nothing */
+  closing?: 'form' | 'form-academy' | 'band' | 'none';
+  /** show the dark upcoming-event notice (off on pages that already show the event) */
+  toast?: boolean;
+  /** the page's largest picture, fetched before anything else (home: the hero photograph) */
+  preloadImage?: { srcset: string; sizes: string };
+}
+const { lang, page, title, description, intro = false, closing = 'band', toast = true, preloadImage } = Astro.props;
+const c = getContent(lang);
+const fullTitle = page === '' ? `${c.meta.siteName} — ${title}` : `${title} — ${c.meta.siteName}`;
+const desc = description ?? c.meta.description;
+const site = Astro.site;
+const abs = (path: string) => (site ? new URL(path, site).href : undefined);
+---
+<!doctype html>
+<html lang={c.htmlLang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={desc} />
+    <meta name="theme-color" content="#ffffff" />
+    <meta name="format-detection" content="telephone=no" />
+    {import.meta.env.PUBLIC_NOINDEX === 'true' && <meta name="robots" content="noindex, nofollow" />}
+    <link rel="icon" type="image/png" sizes="64x64" href={withBase('/favicon-64.png')} />
+    <link rel="apple-touch-icon" href={withBase('/apple-touch-icon.png')} />
+    {preloadImage && <link rel="preload" as="image" imagesrcset={preloadImage.srcset} imagesizes={preloadImage.sizes} fetchpriority="high" />}
+    <link rel="preload" as="font" type="font/woff2" href={interLatin} crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href={crimsonLatin} crossorigin />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={c.meta.siteName} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={desc} />
+    <meta property="og:locale" content={c.htmlLang.replace('-', '_')} />
+    {site && <meta property="og:url" content={abs(href(lang, page))} />}
+    {site && <meta property="og:image" content={abs(withBase('/og.jpg'))} />}
+    {site && <meta property="og:image:width" content="1200" />}
+    {site && <meta property="og:image:height" content="630" />}
+    <meta name="twitter:card" content="summary_large_image" />
+    {site && <link rel="canonical" href={abs(href(lang, page))} />}
+    {site && locales.map((l) => <link rel="alternate" hreflang={l} href={abs(href(l, page))} />)}
+    {site && <link rel="alternate" hreflang="x-default" href={abs(href('de', page))} />}
+    <script is:inline>
+      document.documentElement.classList.add('js');
+      // Safety net: if the motion script has not taken over after 3.5 s, show everything.
+      setTimeout(function () {
+        if (!document.documentElement.classList.contains('motion-ready')) document.documentElement.classList.add('reveal-all');
+      }, 3500);
+    </script>
+  </head>
+  <body data-page={page || 'home'} id="top">
+    <a class="skip-link" href="#main">{c.ui.skip}</a>
+    {intro && <Intro lang={lang} />}
+    <Header lang={lang} page={page} />
+    <main id="main" tabindex="-1">
+      <slot />
+      {closing === 'form' && <LeadSection lang={lang} />}
+      {closing === 'form-academy' && <LeadSection lang={lang} context="academy" />}
+      {closing === 'band' && <ContactBand lang={lang} />}
+    </main>
+    <Footer lang={lang} />
+    <SearchOverlay lang={lang} />
+    {toast && <EventToast lang={lang} />}
+    <script>
+      import '../scripts/main';
+    </script>
+  </body>
+</html>

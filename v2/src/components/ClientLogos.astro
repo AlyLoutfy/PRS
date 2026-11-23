@@ -1,0 +1,19 @@
+---
+// Client logos exported from the Figma file (Swiss Re, Munich Re, Zurich, Allianz, helvetia), resized to
+// twice their largest display height (scripts/optimize-images.mjs).
+import { withBase } from '../lib/url';
+interface Props { ruled?: boolean; reveal?: boolean }
+const { ruled = false, reveal = true } = Astro.props;
+const clients = [
+  { name: 'Swiss Re', file: 'swiss-re', w: 408, h: 96 },
+  { name: 'Munich Re', file: 'munich-re', w: 416, h: 96 },
+  { name: 'Zurich', file: 'zurich', w: 153, h: 96 },
+  { name: 'Allianz', file: 'allianz', w: 387, h: 96 },
+  { name: 'Helvetia', file: 'helvetia', w: 505, h: 96 },
+];
+---
+<ul class:list={['clients', { 'clients--ruled': ruled }]} data-reveal={reveal ? 'fade' : undefined}>
+  {clients.map((cl) => (
+    <li><img class="client" src={withBase(`/clients/${cl.file}.webp`)} alt={cl.name} width={cl.w} height={cl.h} loading="lazy" decoding="async" /></li>
+  ))}
+</ul>

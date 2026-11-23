@@ -1,0 +1,36 @@
+---
+// Contact: dotted globe with the PRS offices (Figma footer) and arcs from the Zug headquarters.
+import { getContent, type Locale } from '../i18n';
+import { landDots } from '../lib/landDots';
+import { offices, presence, EMAIL, telHref, formatCoord } from '../data/offices';
+
+interface Props { lang: Locale }
+const { lang } = Astro.props;
+const c = getContent(lang);
+const dots = landDots(2);
+const markers = [
+  ...offices.map((o) => ({ key: o.key, lat: o.lat, lon: o.lon, hq: o.key === 'ch', label: o.key === 'ch' ? 'Zug' : c.ui.countries[o.key] })),
+  ...presence.map((p) => ({ key: p.key, lat: p.lat, lon: p.lon, hq: false, label: c.ui.countries[p.key] })),
+];
+const data = JSON.stringify({ dots, markers });
+---
+<div class="grid reach">
+  <div class="globe-wrap" data-globe data-reveal="fade">
+    <canvas data-globe-canvas role="img" aria-label={`${c.contact.presence}: ${markers.map((m) => m.label).join(', ')}`}></canvas>
+    <p class="globe-hint meta" aria-hidden="true">{c.ui.globeHint}</p>
+    <script type="application/json" data-globe-data set:html={data} />
+  </div>
+  <ul class="offices">
+    {offices.map((o) => (
+      <li class="office" data-office={o.key} data-reveal="fade">
+        <span class="office__name">{c.footer.offices[o.key]}</span>
+        {o.key === 'ch' ? <span class="office__coord">{formatCoord(o.lat, o.lon)}</span> : <span></span>}
+        <div class="office__lines">
+          {o.address && <div>{o.address.slice(1).join(', ')}, {c.ui.countries[o.key]}</div>}
+          <div><a href={telHref(o.phone)}>T {o.phone}</a></div>
+          <div><a href={`mailto:${EMAIL}`}>{EMAIL}</a></div>
+        </div>
+      </li>
+    ))}
+  </ul>
+</div>

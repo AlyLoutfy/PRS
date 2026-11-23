@@ -1,0 +1,49 @@
+---
+// Imprint / privacy (placeholders — PRS supplies the binding text) and image credits.
+import Base from '../../layouts/Base.astro';
+import PageHead from '../../components/PageHead.astro';
+import { getContent, staticLangPaths, type Locale } from '../../i18n';
+import { art, artPage, artText, type ArtKey } from '../../data/art';
+import { offices, EMAIL } from '../../data/offices';
+import { PHOTO_CREDIT } from '../../data/photos';
+
+export function getStaticPaths() {
+  return staticLangPaths();
+}
+const lang = Astro.params.lang as Locale;
+const c = getContent(lang);
+const hq = offices[0];
+const keys = Object.keys(art) as ArtKey[];
+---
+<Base lang={lang} page="legal" title={c.legal.title}>
+  <PageHead title={c.legal.title} index="08" section="PRS" seed="legal" />
+  <section class="section section--flush-top">
+    <div class="container grid">
+      <div class="prose">
+        <h2 id="imprint">{c.legal.imprint}</h2>
+        <p>PRS Prime Re Solutions AG<br />{hq.address?.slice(1).join(', ')}<br />{c.ui.countries.ch}</p>
+        <p>T {hq.phone}<br /><a class="tlink" href={`mailto:${EMAIL}`}>{EMAIL}</a></p>
+        <p class="note">{c.legal.placeholder}</p>
+
+        <h2 id="privacy">{c.legal.privacy}</h2>
+        <p class="note">{c.legal.placeholder}</p>
+
+        <h2 id="credits">{c.legal.credits}</h2>
+        <p>{c.legal.creditsIntro}</p>
+        <p>{c.legal.photoCredit} {PHOTO_CREDIT}.</p>
+        <ol style="margin-top:18px">
+          {keys.map((k) => {
+            const t = artText(k, lang);
+            const a = art[k] as { collection?: string; license: string };
+            return (
+              <li>
+                {t.artist}, <i>{t.title}</i>{t.year && `, ${t.year}`}{a.collection && ` — ${a.collection}`}. {a.license},{' '}
+                <a class="tlink" href={artPage(k)} target="_blank" rel="noopener">Wikimedia Commons</a>
+              </li>
+            );
+          })}
+        </ol>
+      </div>
+    </div>
+  </section>
+</Base>

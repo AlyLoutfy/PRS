@@ -1,0 +1,81 @@
+---
+// Expertise — Figma 03_Web Design / Expertise.
+import Base from '../../layouts/Base.astro';
+import PageHead from '../../components/PageHead.astro';
+import IntroRow from '../../components/IntroRow.astro';
+import Pill from '../../components/Pill.astro';
+import ArtCard from '../../components/ArtCard.astro';
+import Illustration from '../../components/Illustration.astro';
+import Testimonials from '../../components/Testimonials.astro';
+import { getContent, href, staticLangPaths, type Locale } from '../../i18n';
+import type { ArtKey } from '../../data/art';
+
+export function getStaticPaths() {
+  return staticLangPaths();
+}
+const lang = Astro.params.lang as Locale;
+const c = getContent(lang);
+const e = c.expertise;
+---
+<Base lang={lang} page="expertise" title={e.title} description={e.intro.text}>
+  <PageHead title={e.title} index="01" section={c.nav.expertise} seed="expertise">
+    <IntroRow label={e.intro.label}>
+      <p class="lead" data-reveal="lines">{e.intro.text}</p>
+      <div data-reveal="fade"><Pill href="#services" label={e.intro.cta} variant="rust" /></div>
+    </IntroRow>
+  </PageHead>
+
+  <section class="section section--flush-top" id="services">
+    <div class="container grid trio">
+      {e.services.map((s, i) => (
+        <ArtCard lang={lang} title={s.title} text={s.text} bullets={s.bullets}>
+          <div class="card__media" slot="media">
+            <Illustration kind={s.key as 'models' | 'products' | 'standards'} index={i + 1} lang={lang} label={s.text} />
+          </div>
+        </ArtCard>
+      ))}
+    </div>
+  </section>
+
+  <section class="section" id="approach">
+    <div class="container">
+      <IntroRow label={e.approach.label}>
+        <p class="lead" data-reveal="lines">{e.approach.text}</p>
+      </IntroRow>
+      <div class="grid duo" style="margin-top:clamp(64px,7vw,112px)">
+        {e.approach.items.map((it) => (
+          <ArtCard lang={lang} title={it.title} text={it.text} art={it.art as ArtKey} ratio={1.36} />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--flush-top" id="academy">
+    <div class="container">
+      <IntroRow label={e.academy.label}>
+        <p class="lead" data-reveal="lines">{e.academy.text}</p>
+      </IntroRow>
+      <div class="grid" style="margin-top:clamp(64px,7vw,112px)">
+        <div class="academy-card">
+          <ArtCard
+            lang={lang}
+            title={e.academy.card.title}
+            text={e.academy.card.text}
+            art="athens"
+            href={href(lang, 'academy')}
+            cta={e.academy.card.cta}
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--flush-top" id="clients">
+    <div class="container">
+      <IntroRow label={e.clients.label}>
+        <p class="lead" data-reveal="lines">{e.clients.text}</p>
+      </IntroRow>
+      <Testimonials lang={lang} withQuotes={false} />
+    </div>
+  </section>
+</Base>

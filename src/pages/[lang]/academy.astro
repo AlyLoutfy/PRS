@@ -1,0 +1,66 @@
+---
+// PRS Academy — Figma 03_Web Design / PRS Academy.
+import Base from '../../layouts/Base.astro';
+import PageHead from '../../components/PageHead.astro';
+import IntroRow from '../../components/IntroRow.astro';
+import Pill from '../../components/Pill.astro';
+import ArtCard from '../../components/ArtCard.astro';
+import EventCard from '../../components/EventCard.astro';
+import { getContent, href, staticLangPaths, swissNumber, type Locale } from '../../i18n';
+import { courses } from '../../data/courses';
+import { EMAIL } from '../../data/offices';
+import type { ArtKey } from '../../data/art';
+
+export function getStaticPaths() {
+  return staticLangPaths();
+}
+const lang = Astro.params.lang as Locale;
+const c = getContent(lang);
+const a = c.academy;
+const mail = (subject: string) => `mailto:${EMAIL}?subject=${encodeURIComponent(`${c.ui.requestSubject}: ${subject}`)}`;
+const sorted = [...courses].sort((x, y) => x.title[lang].localeCompare(y.title[lang], lang));
+---
+<Base lang={lang} page="academy" title={a.title} description={a.intro.text}>
+  <PageHead title={a.title} index="02" section={c.nav.expertise} seed="academy">
+    <IntroRow label={a.intro.label}>
+      <p class="lead" data-reveal="lines">{a.intro.text}</p>
+      <div data-reveal="fade"><Pill href={href(lang, 'curriculum')} label={a.intro.cta} /></div>
+    </IntroRow>
+  </PageHead>
+
+  <section class="section section--flush-top">
+    <div class="container grid stats">
+      {a.stats.map((s) => (
+        <div data-reveal="fade">
+          <div class="fact__num" data-count={s.value} data-suffix={s.suffix}>{swissNumber(s.value)}{s.suffix}</div>
+          <p class="fact__label">{s.label}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="section section--flush-top">
+    <div class="container grid duo">
+      {a.formats.map((f) => (
+        <ArtCard lang={lang} title={f.title} text={f.text} art={f.art as ArtKey} href={mail(f.title)} cta={f.cta} ratio={1.3} />
+      ))}
+    </div>
+  </section>
+
+  <section class="section section--flush-top" id="curriculum">
+    <div class="container">
+      <IntroRow label={a.curriculum.label}>
+        <ol class="topics" data-reveal="fade">
+          {sorted.map((k, i) => (
+            <li><span>{String(i + 1).padStart(2, '0')}</span><a href={href(lang, 'curriculum', k.id)}>{k.title[lang]}</a></li>
+          ))}
+        </ol>
+        <div data-reveal="fade"><Pill href={href(lang, 'curriculum')} label={a.curriculum.cta} /></div>
+      </IntroRow>
+    </div>
+  </section>
+
+  <section class="section section--flush-top" id="event">
+    <div class="container"><EventCard lang={lang} /></div>
+  </section>
+</Base>

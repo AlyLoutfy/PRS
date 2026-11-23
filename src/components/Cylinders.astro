@@ -1,0 +1,18 @@
+---
+// "Unsere Arbeitsweise" icons exported from Figma: Ionicons "server-outline" — one 55 × 55 icon for
+// Expertise in Practice, two 36.8 × 55 icons (45.77 px apart) for Expertise Shared.
+import { withBase } from '../lib/url';
+
+interface Props { count: 1 | 2 }
+const { count } = Astro.props;
+---
+<div class="cyl" data-reveal="fade" aria-hidden="true">
+  {count === 1 ? (
+    <img src={withBase('/icons/server-outline.svg')} width="55" height="55" alt="" />
+  ) : (
+    <>
+      <img src={withBase('/icons/server-outline-narrow.svg')} width="36.814" height="55" alt="" />
+      <img src={withBase('/icons/server-outline-narrow.svg')} width="36.814" height="55" alt="" />
+    </>
+  )}
+</div>

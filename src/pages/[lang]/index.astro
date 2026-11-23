@@ -1,0 +1,122 @@
+---
+// Home — structure and copy from Figma 03_Web Design / Homepage.
+import Base from '../../layouts/Base.astro';
+import Hero from '../../components/Hero.astro';
+import IntroRow from '../../components/IntroRow.astro';
+import Pill from '../../components/Pill.astro';
+import Photo from '../../components/Photo.astro';
+import Illustration from '../../components/Illustration.astro';
+import Testimonials from '../../components/Testimonials.astro';
+import Cylinders from '../../components/Cylinders.astro';
+import { getContent, href, staticLangPaths, swissNumber, type Locale } from '../../i18n';
+
+export function getStaticPaths() {
+  return staticLangPaths();
+}
+const lang = Astro.params.lang as Locale;
+const c = getContent(lang);
+const h = c.home;
+---
+<Base lang={lang} page="" title={h.title} heroDark intro>
+  <Hero lang={lang} />
+
+  <section class="section" aria-label={h.intro.label}>
+    <div class="container">
+      <IntroRow label={h.intro.label}>
+        <p class="lead" data-reveal="lines">{h.intro.text}</p>
+      </IntroRow>
+      <div class="grid facts">
+        {h.facts.map((f) => (
+          <div class="fact" data-reveal="fade">
+            <div class="fact__num" data-count={f.value} data-suffix={f.suffix} data-plain={f.plain ? '' : undefined}>
+              {f.plain ? f.value : swissNumber(f.value)}{f.suffix}
+            </div>
+            <p class="fact__label">{f.label}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--flush-top" id="services">
+    <div class="container">
+      <h2 class="h-section section-title" data-reveal="lines">{h.services.title}</h2>
+      <IntroRow label={h.services.label} as="h3">
+        <p class="lead" data-reveal="lines">{h.services.text}</p>
+        <div data-reveal="fade"><Pill href={href(lang, 'expertise')} label={h.services.cta} /></div>
+      </IntroRow>
+      <div class="grid trio" style="margin-top:clamp(72px,8vw,128px)">
+        {h.services.items.map((s, i) => (
+          <article class="card">
+            <span class="rule" data-rule></span>
+            <h3 class="h-card card__title" data-reveal="lines">{s.title}</h3>
+            <div class="card__media">
+              <Illustration kind={s.key as 'models' | 'products' | 'standards'} index={i + 1} lang={lang} label={s.text} />
+            </div>
+            <p class="card__text" data-reveal="fade">{s.text}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--flush-top">
+    <div class="container grid feature">
+      <div class="feature__text">
+        <h2 class="h-statement" data-reveal="lines">{h.method.title}</h2>
+        <p class="body" data-reveal="fade">{h.method.text}</p>
+      </div>
+      <div class="feature__media">
+        <Photo photo="lake" lang={lang} />
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--flush-top" id="approach">
+    <div class="container">
+      <h2 class="h-section section-title" data-reveal="lines">{h.approach.title}</h2>
+      <div class="grid duo">
+        {h.approach.items.map((it, i) => (
+          <article class="card">
+            <span class="rule" data-rule></span>
+            <h3 class="h-card card__title" data-reveal="lines">{it.title}</h3>
+            <Cylinders count={i === 0 ? 1 : 2} />
+            <p class="card__text" data-reveal="fade">{it.text}</p>
+            {'cta' in it && it.cta && (
+              <div class="card__cta" data-reveal="fade"><Pill href={href(lang, 'academy')} label={it.cta} small /></div>
+            )}
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--flush-top" id="about">
+    <div class="container">
+      <h2 class="h-section section-title" data-reveal="lines">{h.about.title}</h2>
+      <IntroRow label={h.about.label} as="h3">
+        <p class="lead" data-reveal="lines">{h.about.text}</p>
+        <div data-reveal="fade"><Pill href={href(lang, 'about')} label={h.about.cta} /></div>
+      </IntroRow>
+    </div>
+  </section>
+
+  <section class="section section--flush-top">
+    <div class="container grid feature">
+      <div class="feature__text">
+        <h2 class="h-statement" data-reveal="lines">{h.audience.title}</h2>
+        <p class="body" data-reveal="fade">{h.audience.text}</p>
+      </div>
+      <div class="feature__media">
+        <Photo photo="glacier" lang={lang} />
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--flush-top" id="clients">
+    <div class="container">
+      <h2 class="h-section section-title" data-reveal="lines">{h.clients.title}</h2>
+      <Testimonials lang={lang} />
+    </div>
+  </section>
+</Base>

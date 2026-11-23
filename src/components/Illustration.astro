@@ -1,0 +1,20 @@
+---
+// Generative line illustrations that fill the empty "Illustrations" slot of the Figma style guide.
+//  models    → Galton board: Monte Carlo draws settling into a distribution
+//  products  → process flow: particles routed through data → model → product → report
+//  standards → validation: a model path checked against a tolerance band, breaches flagged and corrected
+import { getContent, type Locale } from '../i18n';
+interface Props {
+  kind: 'models' | 'products' | 'standards';
+  index: number;
+  lang: Locale;
+  label: string;
+}
+const { kind, index, lang, label } = Astro.props;
+const c = getContent(lang);
+const labels = kind === 'products' ? c.ui.flow : kind === 'standards' ? c.ui.band : [];
+---
+<div class="illo" data-reveal="media" role="img" aria-label={label}>
+  <canvas data-illo={kind} data-labels={JSON.stringify(labels)}></canvas>
+  <span class="illo__tag">{c.ui.figure} {index} — {c.ui.illo[kind]}</span>
+</div>

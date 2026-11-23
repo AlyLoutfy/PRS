@@ -1,0 +1,87 @@
+---
+import Logo from './Logo.astro';
+import { withBase } from '../lib/url';
+import { getContent, href, locales, type Locale, type PageSlug } from '../i18n';
+import { offices, EMAIL, telHref } from '../data/offices';
+
+interface Props {
+  lang: Locale;
+  page: PageSlug;
+  onDark?: boolean;
+}
+const { lang, page, onDark = false } = Astro.props;
+const c = getContent(lang);
+const hq = offices[0];
+const isCurrent = (slug: PageSlug, group: PageSlug[]) => group.includes(page) || slug === page;
+---
+<header class:list={['site-header', { 'site-header--on-dark': onDark }]} data-header>
+  <div class="container site-header__bar">
+    <a class="logo" href={href(lang)} aria-label={`PRS Prime Re Solutions – ${c.ui.home}`}>
+      <Logo />
+    </a>
+
+    <nav class="nav-primary" aria-label="Primary">
+      <a href={href(lang, 'expertise')} aria-current={isCurrent('expertise', ['expertise', 'academy', 'curriculum']) ? 'page' : undefined}>{c.nav.expertise}</a>
+      <a href={href(lang, 'about')} aria-current={isCurrent('about', ['about', 'team', 'news']) ? 'page' : undefined}>{c.nav.about}</a>
+    </nav>
+
+    <div class="header-tools">
+      <nav class="lang-switch lang-switch--desktop" aria-label={c.ui.language}>
+        {locales.map((l) => (
+          <a href={href(l, page)} hreflang={l} lang={l} aria-current={l === lang ? 'true' : undefined}>{l.toUpperCase()}</a>
+        ))}
+      </nav>
+      <button class="icon-btn" type="button" data-search-open aria-label={c.ui.searchOpen} aria-haspopup="dialog">
+        <img class="nav-icon" src={withBase('/icons/search.svg')} width="17" height="17" alt="" />
+      </button>
+      <span class="kbd" aria-hidden="true">⌘K</span>
+      <button class="icon-btn" type="button" data-menu-open aria-expanded="false" aria-controls="mega">
+        <span class="sr-only">{c.ui.menu}</span>
+        <img class="nav-icon" src={withBase('/icons/menu.svg')} width="28" height="23" alt="" />
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="mega" id="mega" data-mega inert role="dialog" aria-modal="true" aria-label={c.ui.menu}>
+  <div class="mega__scrim" data-menu-close></div>
+  <div class="mega__panel" data-lenis-prevent>
+    <div class="container">
+      <div class="mega__top">
+        <a class="logo" href={href(lang)} aria-label={`PRS Prime Re Solutions – ${c.ui.home}`}><Logo /></a>
+        <button class="icon-btn" type="button" data-menu-close aria-label={c.ui.close}>
+          <svg viewBox="0 0 18 18" aria-hidden="true"><path d="M3 3l12 12M15 3 3 15" stroke="currentColor" stroke-width="1.4" /></svg>
+        </button>
+      </div>
+      <div class="grid mega__cols">
+        {c.nav.mega.map((group) => (
+          <div class="mega__col" data-mega-col>
+            <span class="rule" data-mega-rule></span>
+            <p class="mega__col-title"><a href={href(lang, group.page as PageSlug)}>{group.title}</a></p>
+            {group.links.length > 0 ? (
+              <ul class="mega__links">
+                {group.links.map((l) => (
+                  <li><a href={href(lang, l.page as PageSlug, 'hash' in l ? (l as { hash?: string }).hash : undefined)}>{l.label}</a></li>
+                ))}
+              </ul>
+            ) : (
+              <ul class="mega__links">
+                <li><a href={`mailto:${EMAIL}`}>{EMAIL}</a></li>
+                <li><a href={telHref(hq.phone)}>T {hq.phone}</a></li>
+                <li><span style="color:var(--ink-3)">{hq.address?.slice(1).join(', ')}</span></li>
+              </ul>
+            )}
+          </div>
+        ))}
+      </div>
+      <div class="mega__footer">
+        <nav class="lang-switch" aria-label={c.ui.language}>
+          {locales.map((l) => (
+            <a href={href(l, page)} hreflang={l} lang={l} aria-current={l === lang ? 'true' : undefined}>{getContent(l).name}</a>
+          ))}
+        </nav>
+        <span>{c.footer.copyright}</span>
+      </div>
+    </div>
+  </div>
+</div>

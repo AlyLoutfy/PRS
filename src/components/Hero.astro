@@ -1,0 +1,53 @@
+---
+// Home hero — Figma "Hero 1": the alpine photograph with a 15 % left gradient and the white SangBleu
+// headline at column 2. On top, a WebGL layer tells "model → reality": on first visit a generative relief
+// rises from the valleys, then the photograph replaces it from the valleys up; afterwards a surveyor's loupe
+// shows the terrain model (contours, slope heat, LV95-style readout) under the cursor.
+// Without WebGL or JS the photograph is simply shown, exactly as in the design.
+import { getContent, type Locale } from '../i18n';
+import { photos, photoSrcSet } from '../data/photos';
+interface Props { lang: Locale }
+const { lang } = Astro.props;
+const c = getContent(lang);
+const hero = photos.hero;
+---
+<section class="hero" data-hero>
+  <img
+    class="hero__photo"
+    src={hero.src}
+    srcset={photoSrcSet('hero')}
+    sizes="100vw"
+    alt={hero.alt[lang]}
+    width={hero.w}
+    height={hero.h}
+    fetchpriority="high"
+    decoding="async"
+    data-hero-photo
+  />
+  <canvas class="hero__canvas" data-relief aria-hidden="true"></canvas>
+  <div class="hero__veil" aria-hidden="true"></div>
+  <div class="container hero__content">
+    <div class="grid">
+      <div class="hero__text">
+        <h1 class="h-hero hero__title" data-hero-title>{c.home.hero.title}</h1>
+        <p class="hero__sub" data-hero-sub>{c.home.hero.sub}</p>
+      </div>
+    </div>
+  </div>
+  <div class="hero__foot" data-hero-foot>
+    <div class="container hero__foot-inner">
+      <span class="scroll-cue meta" style="color:inherit"><span class="scroll-cue__line"></span>{c.ui.scroll}</span>
+      <div class="scalebar meta" style="color:inherit" aria-hidden="true">
+        <div class="scalebar__bar"><span></span><span></span><span></span><span></span></div>
+        <div class="scalebar__labels"><span>0</span><span>500 m</span><span>1 km</span></div>
+        <span>{c.ui.scale}</span>
+        <span style="opacity:.75">{c.ui.reliefNote}</span>
+      </div>
+    </div>
+  </div>
+  <div class="readout" data-readout aria-hidden="true">
+    <span><b data-ro-e>2’681’200</b> E</span>
+    <span><b data-ro-n>1’224’300</b> N</span>
+    <span><b data-ro-h>1’842</b> {c.ui.elevation}</span>
+  </div>
+</section>

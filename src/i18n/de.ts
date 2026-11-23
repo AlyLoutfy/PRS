@@ -1,0 +1,324 @@
+// German (Swiss) — copy taken from the PRS_Rebranding Figma file (03_Web Design, 02_Components).
+// Swiss orthography: "ss" instead of "ß".
+
+const de = {
+  code: 'de',
+  htmlLang: 'de-CH',
+  name: 'Deutsch',
+  meta: {
+    siteName: 'PRS Prime Re Solutions',
+    description:
+      'PRS ist ein unabhängiges Unternehmen erfahrener Aktuarinnen und Aktuare aus Zug: Modelle, Produkte und Prozesse, Standards und Regulierung – und die PRS Academy.',
+  },
+  ui: {
+    skip: 'Zum Inhalt springen',
+    menu: 'Menü',
+    close: 'Schliessen',
+    search: 'Suche',
+    searchOpen: 'Suche öffnen',
+    searchPlaceholder: 'Suchen – z. B. Solvency II, Copulas, Team',
+    searchEmpty: 'Keine Treffer für',
+    searchKeys: { move: 'navigieren', open: 'öffnen', close: 'schliessen' },
+    groups: { pages: 'Seiten', courses: 'Lehrplan', people: 'Team' },
+    language: 'Sprache',
+    home: 'Startseite',
+    scroll: 'Scrollen',
+    scale: 'Massstab 1 : 25 000',
+    elevation: 'm ü. M.',
+    reliefNote: 'Lupe: generatives Geländemodell',
+    prev: 'Zurück',
+    next: 'Weiter',
+    all: 'Alle',
+    topicOne: 'Thema',
+    topicMany: 'Themen',
+    filterSearch: 'Thema suchen',
+    noCourses: 'Kein Thema entspricht diesen Filtern.',
+    request: 'Anfragen',
+    requestSubject: 'Anfrage',
+    learnMore: 'Mehr erfahren',
+    countdown: { label: 'Beginnt in', days: 'Tage', hours: 'Std.', minutes: 'Min.', running: 'Die Veranstaltung läuft.' },
+    globeHint: 'Ziehen, um den Globus zu drehen',
+    introPlace: 'Zug · Schweiz',
+    introSince: 'Seit 2011',
+    countries: { ch: 'Schweiz', si: 'Slowenien', mx: 'Mexiko', pe: 'Peru', ec: 'Ecuador' },
+    format: { workshop: 'Workshop', seminar: 'Seminar', hours: 'Stunden' },
+    categories: {
+      modelling: 'Risikomodellierung',
+      solvency: 'Solvenz',
+      reserving: 'Reservierung',
+      reinsurance: 'Rückversicherung',
+    },
+    clientsNote: 'Wortmarken als Platzhalter – die Originallogos werden von PRS geliefert.',
+    portraitNote: 'Porträt folgt',
+    figure: 'Abb.',
+    flow: ['Daten', 'Modell', 'Produkt', 'Bericht'],
+    band: ['Toleranzband', 'Abweichung', 'korrigiert'],
+    illo: { models: 'Simulation', products: 'Prozess', standards: 'Prüfung' },
+  },
+  nav: {
+    expertise: 'Expertise',
+    about: 'Über uns',
+    contact: 'Kontakt',
+    mega: [
+      {
+        title: 'Expertise',
+        page: 'expertise',
+        links: [
+          { label: 'Unsere Leistung', page: 'expertise', hash: 'services' },
+          { label: 'Unsere Arbeitsweise', page: 'expertise', hash: 'approach' },
+          { label: 'PRS Academy', page: 'academy' },
+          { label: 'Lehrplan', page: 'curriculum' },
+          { label: 'Unsere Kunden', page: 'expertise', hash: 'clients' },
+        ],
+      },
+      {
+        title: 'Über uns',
+        page: 'about',
+        links: [
+          { label: 'Über uns', page: 'about' },
+          { label: 'Unser Team', page: 'team' },
+          { label: 'Aktuelles', page: 'news' },
+        ],
+      },
+      { title: 'Kontakt', page: 'contact', links: [] },
+    ],
+  },
+  footer: {
+    claim: 'Experts for Experts.',
+    claimSub: 'Seit 2011 in Zug.',
+    offices: { ch: 'Schweiz (Hauptsitz)', si: 'Slowenien', mx: 'Mexiko', pe: 'Peru' },
+    imprint: 'Impressum',
+    privacy: 'Datenschutz',
+    credits: 'Bildnachweis',
+    linkedin: 'LinkedIn',
+    copyright: '© 2026 PRS Prime Re Solutions AG',
+  },
+  testimonials: [
+    {
+      quote: 'Wir schätzten die fachliche Strenge, das konstruktive Hinterfragen und das pragmatische Urteil von PRS.',
+      name: 'Peter Middelkamp',
+      role: 'Head of Financial Market and Credit Risk Modelling, Swiss Re',
+    },
+    {
+      quote:
+        'PRS hat nicht nur in Rekordzeit ein hochentwickeltes internes Risikomodell erstellt, sondern auch die Mitarbeitenden von Europa Re in dessen Anwendung geschult.',
+      name: 'Eugene Gurenko',
+      role: 'Lead Insurance Specialist, Weltbank',
+    },
+    {
+      quote:
+        'Sie haben die Ergebnisse unserem Verwaltungsrat brillant präsentiert. Über die erstklassige Qualität ihrer Arbeit hinaus haben sie uns mit Charme und Witz für sich gewonnen.',
+      name: 'Alvaro Villamor',
+      role: 'Chief Executive Officer, Telefónica Insurance',
+    },
+  ],
+  event: {
+    start: '2026-11-27T09:00:00+01:00',
+    end: '2026-12-07T18:00:00+01:00',
+    date: '27. November – 7. Dezember 2026',
+    title: 'Aktuarielle Aufsicht im Rahmen von IFRS 17',
+    text: 'Von den Grundlagen zur praktischen Anwendung: Der Workshop vermittelt Methoden zur Bewertung und aktuariellen Überprüfung der Umsetzung von IFRS 17. Praxisnahe Übungen vertiefen das Wissen.',
+    meta: ['15 Stunden', '5 Termine', 'Auf Spanisch'],
+    label: 'Kommende Veranstaltung',
+  },
+  home: {
+    title: 'Aktuarielle Expertise aus Zug',
+    hero: {
+      title: 'Wissen wird stärker, wenn es angewendet, hinterfragt und geteilt wird.',
+      sub: 'Deshalb beginnen wir jedes Mandat mit einer Frage und beenden es mit Wissen, das bei Ihnen bleibt.',
+    },
+    intro: {
+      label: 'Experts for Experts',
+      text: 'PRS ist ein unabhängiges Unternehmen erfahrener Aktuarinnen und Aktuare mit der Überzeugung, dass Fachleute ein Gegenüber auf Augenhöhe verdienen. Gegründet 2011 in Zug, arbeitet PRS heute in fünf Ländern und gehört vollständig seinen Mitarbeitenden.',
+    },
+    facts: [
+      { value: 2011, suffix: '', label: 'gegründet in Zug', plain: true },
+      { value: 5, suffix: '', label: 'Länder, in denen PRS arbeitet' },
+      { value: 100, suffix: ' %', label: 'im Besitz der Mitarbeitenden' },
+      { value: 900, suffix: '+', label: 'Alumni der PRS Academy' },
+    ],
+    services: {
+      title: 'Unsere Leistungen',
+      label: 'Tailored Thinking',
+      text: 'Keine Situation gleicht der anderen. Deshalb erarbeiten wir jede Antwort aus Ihren Daten und innerhalb Ihres regulatorischen Rahmens. Unter mehreren plausiblen Optionen wählen wir auf Basis unserer Erfahrung die fachlich überzeugendste.',
+      cta: 'Mehr erfahren',
+      items: [
+        { key: 'models', title: 'Modelle', text: 'Wir entwickeln und prüfen Modelle für Tarifierung, Reservierung und Solvenz.' },
+        { key: 'products', title: 'Produkte & Prozesse', text: 'Wir entwickeln Produkte und Modelle, gestalten Prozesse und machen Daten auswertbar.' },
+        { key: 'standards', title: 'Standards & Regulierung', text: 'Wir prüfen, ob Ihre Modelle und Prozesse den geltenden Vorschriften genügen, und zeigen, wo sie es nicht tun.' },
+      ],
+    },
+    method: {
+      title: 'Genau in der Methode, unkompliziert in der Zusammenarbeit.',
+      text: 'Seit unserer Gründung steht PRS für aktuarielle Arbeit, die nachfragt, nachrechnet und nachvollziehbar bleibt. Sie haben direkten Zugang zu uns und arbeiten vom ersten Gespräch bis zum Abschluss mit denselben Ansprechpersonen.',
+    },
+    approach: {
+      title: 'Unsere Arbeitsweise',
+      items: [
+        {
+          title: 'Expertise in Practice',
+          text: 'Wir wenden unser Wissen an: Wir entwickeln und prüfen aktuarielle Modelle und übernehmen aktuarielle Funktionen. Wo keine fertige Methode existiert, erarbeiten wir sie.',
+        },
+        {
+          title: 'Expertise Shared',
+          text: 'Wir geben unser Wissen weiter: an Ihre Teams im Mandat, an Fachleute in der PRS Academy und an den Berufsstand in den Aktuarvereinigungen.',
+          cta: 'Academy kennenlernen',
+        },
+      ],
+    },
+    about: {
+      title: 'Über uns',
+      label: 'Mut zur Wahrheit',
+      text: 'PRS gehört seinen Mitarbeitenden und hat keine externen Investoren. Wir urteilen unabhängig und sagen, was unsere Analysen zeigen, auch wenn es unbequem ist.',
+      cta: 'Uns kennenlernen',
+    },
+    audience: {
+      title: 'Für alle, die Risiken tragen oder beaufsichtigen.',
+      text: 'Wir arbeiten für Lebens-, Nichtlebens-, Unfall- und Krankenversicherer, Rückversicherer und Captives, von der kleinen Gesellschaft bis zum Konzern. Manche begleiten wir seit über zehn Jahren, andere für eine einzige, schwierige Frage.',
+    },
+    clients: { title: 'Unsere Kunden' },
+  },
+  expertise: {
+    title: 'Expertise',
+    intro: {
+      label: 'Unsere Leistung',
+      text: 'Versicherungsentscheidungen beruhen auf Modellen, Daten und Vorschriften, die sich laufend ändern. Deshalb hinterfragen wir Annahmen, bevor wir sie verwenden, und erarbeiten Ergebnisse, die in der Praxis bestehen. Dafür arbeiten wir in drei Feldern: Modelle, Produkte und Prozesse sowie Standards und Regulierung.',
+      cta: 'Leistungsüberblick ansehen',
+    },
+    services: [
+      {
+        key: 'models',
+        title: 'Modelle',
+        text: 'Wir gestalten Ihre finanziellen und wirtschaftlichen Systeme mit aktuariellen Modellen.',
+        bullets: ['Tarifierung', 'Reservierung', 'Risiko-, Kapital- und Solvenzmodelle'],
+      },
+      {
+        key: 'products',
+        title: 'Produkte & Prozesse',
+        text: 'Wir entwickeln Produkte, optimieren Rückversicherung und gestalten aktuarielle Abläufe.',
+        bullets: ['Produktentwicklung', 'Rückversicherungsoptimierung', 'Aktuarielle Prozesse', 'Compliance und Governance'],
+      },
+      {
+        key: 'standards',
+        title: 'Standards & Regulierung',
+        text: 'Wir sorgen dafür, dass Ihre Produkte und Prozesse den geltenden Regeln entsprechen.',
+        bullets: [
+          'Solvenzregime SST und Solvency II',
+          'Verantwortlicher Aktuar und Versicherungsmathematische Funktion',
+          'Regulatorische Umsetzung',
+          'Compliance und Berichterstattung',
+        ],
+      },
+    ],
+    approach: {
+      label: 'Unsere Arbeitsweise',
+      text: 'Wir lösen aktuarielle Fragen und stärken dabei Ihre Teams. Deshalb wenden wir unser Wissen an, hinterfragen es in jedem Mandat und geben es weiter. So bleibt es nicht bei uns, sondern wächst bei Ihnen und im Berufsstand.',
+      items: [
+        {
+          title: 'Expertise in Practice',
+          art: 'syndics',
+          text: 'Wir entwickeln aktuarielle Modelle. Wir übernehmen Aufgaben und Rollen wie die des Verantwortlichen Aktuars oder der Versicherungsmathematischen Funktion. Wir prüfen bestehende Modelle und arbeiten an Fragen, auf die es noch keine Standardantwort gibt. Dabei verbinden wir aktuelle Erkenntnisse aus der Wissenschaft mit einer pragmatischen Umsetzung bei Ihnen.',
+        },
+        {
+          title: 'Expertise Shared',
+          art: 'merryFamily',
+          text: 'Am Ende eines Mandats übergeben wir Modelle, Werkzeuge und Dokumentation vollständig und schulen bei Bedarf Ihre Teams in der Anwendung. So stärken wir Ihre eigenen Fähigkeiten. Aus demselben Gedanken entstand die PRS Academy.',
+        },
+      ],
+    },
+    academy: {
+      label: 'PRS Academy',
+      text: 'Wissen soll nicht nur in Mandaten wirken. Deshalb unterrichten wir in der PRS Academy Fachleute, die aktuarielle Methoden in ihrer eigenen Arbeit anwenden. In massgeschneiderten Inhouse-Ausbildungen bei Ihnen, externen Workshops und Seminaren verbinden wir den aktuellen Stand des Fachs mit der Praxis.',
+      card: {
+        title: 'PRS Academy',
+        text: 'Weiterbildungen, in denen Sie aktuarielle Theorie in die Praxis umsetzen.',
+        cta: 'Die PRS Academy kennenlernen',
+      },
+    },
+    clients: {
+      label: 'Unsere Kunden',
+      text: 'Seit 2011 arbeiten wir für Erst- und Rückversicherer, Captives und Regulatoren. Unsere Ansprechpersonen bewerten, steuern oder prüfen Risiken: als Aktuare, Risikomanager, Finanzverantwortliche, in der internen Revision oder bei der Aufsicht.',
+    },
+  },
+  academy: {
+    title: 'PRS Academy',
+    intro: {
+      label: 'PRS Academy',
+      text: 'Wissen wird stärker, wenn man es teilt. Deshalb unterrichten wir seit 2015 in der PRS Academy Fachleute, die Risiken bewerten, steuern oder prüfen. In Workshops, Seminaren und Inhouse-Ausbildungen bei Ihnen bringen wir den akademischen Stand des Fachs in die Praxis.',
+      cta: 'Lehrplan ansehen',
+    },
+    stats: [
+      { value: 900, suffix: '+', label: 'Alumni' },
+      { value: 8, suffix: '', label: 'Unterrichtssprachen' },
+      { value: 11, suffix: '', label: 'Jahre PRS Academy' },
+    ],
+    formats: [
+      {
+        key: 'workshop',
+        title: 'Workshop (16 Stunden)',
+        art: 'orrery',
+        text: 'Ein Workshop behandelt ein Thema in 16 Stunden, von den Grundlagen bis zu fortgeschrittenen Methoden. Erfahrene PRS-Aktuare unterrichten. Auf Anfrage führen wir den Workshop auch bei Ihnen im Haus durch.',
+        cta: 'Workshop anfragen',
+      },
+      {
+        key: 'seminar',
+        title: 'Seminar (3 Stunden)',
+        art: 'astronomer',
+        text: 'Ein Seminar vermittelt in 3 Stunden einen kompakten Einstieg in ein Thema. Erfahrene PRS-Aktuare unterrichten. Es eignet sich, wenn Sie ein neues Gebiet zuerst kennenlernen möchten. Auf Anfrage führen wir das Seminar auch bei Ihnen im Haus durch.',
+        cta: 'Seminar anfragen',
+      },
+    ],
+    curriculum: { label: 'Unser Lehrplan', cta: 'Alle 19 Themen im Detail' },
+  },
+  curriculum: {
+    title: 'Lehrplan',
+    label: 'Unser Lehrplan',
+    text: 'Wir unterrichten 19 Themen aus Risikomodellierung, Solvenz, Reservierung und Rückversicherung. Jedes davon können Sie bei uns anfragen, einzeln oder kombiniert, auf Wunsch auch bei Ihnen im Haus.',
+  },
+  about: {
+    title: 'Über uns',
+    intro: {
+      label: 'Über uns',
+      text: 'Wir sind erfahrene Aktuarinnen und Aktuare mit direktem Zugang für unsere Kunden. Deshalb haben Sie vom ersten Gespräch bis zum Abschluss dieselben Ansprechpersonen.',
+    },
+    cards: [
+      { key: 'story', title: 'Unsere Geschichte', art: 'census', text: 'PRS wurde 2011 in Zug gegründet. Seit 2015 gibt die PRS Academy unser Wissen an Fachleute weiter.', page: 'academy', cta: '' },
+      { key: 'team', title: 'Unser Team', art: 'harvesters', text: 'Unser Team vereint Aktuarinnen und Aktuare mit umfangreicher Erfahrung in verschiedenen Disziplinen und Märkten.', page: 'team', cta: 'Uns kennenlernen' },
+      { key: 'ownership', title: 'Eigentum & Unabhängigkeit', art: 'gisze', text: 'PRS gehört vollständig seinen Mitarbeitenden. Wir haben keine externen Investoren und sind frei von fremden Interessen.', page: '', cta: '' },
+      { key: 'reach', title: 'Internationale Reichweite', art: 'ambassadors', text: 'Wir arbeiten in der Schweiz, Slowenien, Mexiko, Peru und Ecuador. Unsere Kunden sitzen weltweit, von klein bis gross.', page: 'contact', cta: '' },
+      { key: 'services', title: 'Leistungsüberblick', art: 'goldsmith', text: 'Unser Fachwissen reicht von Modellen über Produkte und Prozesse bis zu Standards und Regulierung.', page: 'expertise', cta: '' },
+      { key: 'news', title: 'Aktuelles', art: 'erasmus', text: 'Wir berichten über aktuelle Projekte, Fachthemen und Workshops. Hier erfahren Sie, was bei PRS gerade passiert.', page: 'news', cta: '' },
+    ],
+  },
+  team: {
+    title: 'Team',
+    label: 'Unser Team',
+    text: 'Eine aktuarielle Frage verlangt selten nur ein Fachgebiet. Deshalb vereint PRS Aktuarinnen und Aktuare mit sich ergänzender Expertise in fünf Ländern. Für jedes Mandat stellen wir das passende Team zusammen, mit dem Sie direkt und auf Augenhöhe arbeiten.',
+  },
+  contact: {
+    title: 'Kontakt',
+    label: 'Kontakt',
+    text: 'Sie haben direkten Zugang zu uns und arbeiten vom ersten Gespräch bis zum Abschluss mit denselben Ansprechpersonen.',
+    write: 'solutions@prs-zug.com',
+    presence: 'Präsenz',
+  },
+  news: {
+    title: 'Aktuelles',
+    label: 'Aktuelles',
+    text: 'Wir berichten über aktuelle Projekte, Fachthemen und Workshops. Hier erfahren Sie, was bei PRS gerade passiert.',
+    more: 'Weitere Beiträge folgen in Kürze.',
+  },
+  legal: {
+    title: 'Impressum & Datenschutz',
+    imprint: 'Impressum',
+    privacy: 'Datenschutz',
+    credits: 'Bildnachweis',
+    photoCredit: 'Alpine Fotografie (Startseite):',
+    placeholder: 'Platzhalter: Der rechtsverbindliche Text wird von PRS bereitgestellt.',
+    creditsIntro:
+      'Die Gemälde stammen aus gemeinfreien Reproduktionen auf Wikimedia Commons. Das Geländemodell in der Lupe der Startseite wird live im Browser berechnet und zeigt keinen realen Ort.',
+  },
+};
+
+export type Content = typeof de;
+export default de;

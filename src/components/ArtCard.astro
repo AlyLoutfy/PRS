@@ -1,0 +1,37 @@
+---
+// Card from the Figma "Übersicht" component: hairline, serif title, painting, text, optional button.
+import Media from './Media.astro';
+import Pill from './Pill.astro';
+import type { ArtKey } from '../data/art';
+import type { Locale } from '../i18n';
+
+interface Props {
+  lang: Locale;
+  title: string;
+  text?: string;
+  art?: ArtKey;
+  href?: string;
+  cta?: string;
+  ctaVariant?: 'sage' | 'rust' | 'blue';
+  bullets?: string[];
+  ratio?: number;
+  id?: string;
+}
+const { lang, title, text, art, href, cta, ctaVariant = 'sage', bullets, ratio = 1.42, id } = Astro.props;
+const titleLink = href && !cta;
+---
+<article class:list={['card', { 'card--link': titleLink }]} id={id}>
+  <span class="rule" data-rule></span>
+  <h3 class="h-card card__title" data-reveal="lines">
+    {titleLink ? <a href={href}>{title}</a> : title}
+  </h3>
+  {art && <div class="card__media"><Media art={art} lang={lang} ratio={ratio} /></div>}
+  <slot name="media" />
+  {text && <p class="card__text" data-reveal="fade">{text}</p>}
+  {bullets && (
+    <ul class="card__list" data-reveal="fade">
+      {bullets.map((b) => <li>{b}</li>)}
+    </ul>
+  )}
+  {cta && href && <div class="card__cta" data-reveal="fade"><Pill href={href} label={cta} variant={ctaVariant} small /></div>}
+</article>

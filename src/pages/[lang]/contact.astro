@@ -1,0 +1,27 @@
+---
+// Contact — Figma 03_Web Design / Kontakt (offices), presented on an interactive globe.
+import Base from '../../layouts/Base.astro';
+import PageHead from '../../components/PageHead.astro';
+import IntroRow from '../../components/IntroRow.astro';
+import Pill from '../../components/Pill.astro';
+import Globe from '../../components/Globe.astro';
+import { getContent, staticLangPaths, type Locale } from '../../i18n';
+import { EMAIL } from '../../data/offices';
+
+export function getStaticPaths() {
+  return staticLangPaths();
+}
+const lang = Astro.params.lang as Locale;
+const c = getContent(lang);
+---
+<Base lang={lang} page="contact" title={c.contact.title} description={c.contact.text}>
+  <PageHead title={c.contact.title} index="07" section={c.nav.contact} seed="contact">
+    <IntroRow label={c.contact.label}>
+      <p class="lead" data-reveal="lines">{c.contact.text}</p>
+      <div data-reveal="fade"><Pill href={`mailto:${EMAIL}`} label={c.contact.write} variant="blue" /></div>
+    </IntroRow>
+  </PageHead>
+  <section class="section section--flush-top">
+    <div class="container"><Globe lang={lang} /></div>
+  </section>
+</Base>

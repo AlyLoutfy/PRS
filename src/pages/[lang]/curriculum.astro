@@ -1,0 +1,72 @@
+---
+// Curriculum ("Lehrplan") — Figma 03_Web Design / Lehrplan, with live filters and per-topic enquiries.
+import Base from '../../layouts/Base.astro';
+import PageHead from '../../components/PageHead.astro';
+import IntroRow from '../../components/IntroRow.astro';
+import Pill from '../../components/Pill.astro';
+import EventCard from '../../components/EventCard.astro';
+import { getContent, staticLangPaths, type Locale } from '../../i18n';
+import { courses, type CourseCategory } from '../../data/courses';
+import { EMAIL } from '../../data/offices';
+
+export function getStaticPaths() {
+  return staticLangPaths();
+}
+const lang = Astro.params.lang as Locale;
+const c = getContent(lang);
+const cats: CourseCategory[] = ['modelling', 'solvency', 'reserving', 'reinsurance'];
+const count = (cat: CourseCategory) => courses.filter((k) => k.category === cat).length;
+const mail = (subject: string) => `mailto:${EMAIL}?subject=${encodeURIComponent(`${c.ui.requestSubject}: ${subject}`)}`;
+---
+<Base lang={lang} page="curriculum" title={c.curriculum.title} description={c.curriculum.text}>
+  <PageHead title={c.curriculum.title} index="03" section="PRS Academy" seed="curriculum">
+    <IntroRow label={c.curriculum.label}>
+      <p class="lead" data-reveal="lines">{c.curriculum.text}</p>
+    </IntroRow>
+  </PageHead>
+
+  <section class="section section--flush-top" data-filter-root>
+    <div class="container">
+      <div class="filters" data-reveal="fade">
+        <button class="chip" type="button" data-filter="category" data-value="all" aria-pressed="true">{c.ui.all} <span class="chip__count">{courses.length}</span></button>
+        {cats.map((cat) => (
+          <button class="chip" type="button" data-filter="category" data-value={cat} aria-pressed="false">
+            {c.ui.categories[cat]} <span class="chip__count">{count(cat)}</span>
+          </button>
+        ))}
+        <span class="filters__sep" aria-hidden="true"></span>
+        <button class="chip" type="button" data-filter="format" data-value="all" aria-pressed="true">{c.ui.all}</button>
+        <button class="chip" type="button" data-filter="format" data-value="workshop" aria-pressed="false">{c.ui.format.workshop}</button>
+        <button class="chip" type="button" data-filter="format" data-value="seminar" aria-pressed="false">{c.ui.format.seminar}</button>
+        <label class="filter-search">
+          <svg viewBox="0 0 18 18" aria-hidden="true"><circle cx="7.6" cy="7.6" r="5.6" fill="none" stroke="currentColor" stroke-width="1.4" /><path d="M11.8 11.8 16.5 16.5" stroke="currentColor" stroke-width="1.4" /></svg>
+          <span class="sr-only">{c.ui.filterSearch}</span>
+          <input type="search" placeholder={c.ui.filterSearch} data-filter-text autocomplete="off" />
+        </label>
+      </div>
+      <p class="meta course-count" aria-live="polite" data-filter-count data-one={c.ui.topicOne} data-many={c.ui.topicMany}>
+        {courses.length} {c.ui.topicMany}
+      </p>
+
+      <div class="grid courses">
+        {courses.map((k) => (
+          <article class="course" id={k.id} data-filter-item data-category={k.category} data-format={k.format}>
+            <span class="rule" data-rule></span>
+            <h2 class="h-card">{k.title[lang]}</h2>
+            <p class="course__meta">
+              <span>{c.ui.format[k.format]}</span><i></i><span>{k.hours} {c.ui.format.hours}</span><i></i>
+              <span class="course__tag">{c.ui.categories[k.category]}</span>
+            </p>
+            <p class="course__text">{k.text[lang]}</p>
+            <Pill href={mail(k.title[lang])} label={c.ui.request} small />
+          </article>
+        ))}
+        <p class="courses-empty" data-filter-empty hidden>{c.ui.noCourses}</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="event">
+    <div class="container"><EventCard lang={lang} /></div>
+  </section>
+</Base>

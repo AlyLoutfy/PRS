@@ -1,0 +1,31 @@
+---
+// "Kommende Veranstaltung" (Figma: PRS Academy / Lehrplan) with a live countdown.
+import Media from './Media.astro';
+import Pill from './Pill.astro';
+import { getContent, type Locale } from '../i18n';
+import { EMAIL } from '../data/offices';
+interface Props { lang: Locale }
+const { lang } = Astro.props;
+const c = getContent(lang);
+const e = c.event;
+const mail = `mailto:${EMAIL}?subject=${encodeURIComponent(`${c.ui.requestSubject}: ${e.title}`)}`;
+---
+<div class="event">
+  <div class="event__media"><Media art="geographer" lang={lang} ratio={1.18} /></div>
+  <div class="event__body">
+    <span class="rule" data-rule></span>
+    <h3 class="h-card" style="margin-top:24px" data-reveal="lines">{e.label}</h3>
+    <p class="event__date" data-reveal="fade"><time datetime={e.start.slice(0, 10)}>{e.date}</time></p>
+    <p class="event__title serif" data-reveal="fade">{e.title}</p>
+    <p class="body" style="margin-top:16px" data-reveal="fade">{e.text}</p>
+    <p class="event__meta" data-reveal="fade">{e.meta.join('  |  ')}</p>
+    <p class="meta" style="margin-top:28px" data-cd-label>{c.ui.countdown.label}</p>
+    <div class="countdown" style="margin-top:12px" data-countdown data-start={e.start} data-end={e.end} aria-live="off" data-reveal="fade">
+      <div><b data-cd="d">–</b><span>{c.ui.countdown.days}</span></div>
+      <div><b data-cd="h">–</b><span>{c.ui.countdown.hours}</span></div>
+      <div><b data-cd="m">–</b><span>{c.ui.countdown.minutes}</span></div>
+    </div>
+    <p class="body" data-cd-running hidden>{c.ui.countdown.running}</p>
+    <div style="margin-top:30px" data-reveal="fade"><Pill href={mail} label={c.ui.learnMore} small /></div>
+  </div>
+</div>

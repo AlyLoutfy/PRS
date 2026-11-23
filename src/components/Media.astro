@@ -1,0 +1,41 @@
+---
+// Painting / landscape frame with clip reveal, a conservator's loupe on hover and a museum label.
+import { art, artSrc, artSrcSet, artText, type ArtKey } from '../data/art';
+import type { Locale } from '../i18n';
+
+interface Props {
+  art: ArtKey;
+  lang: Locale;
+  ratio?: number;
+  loupe?: boolean;
+  sizes?: string;
+  eager?: boolean;
+  parallax?: boolean;
+}
+const { art: key, lang, ratio = 1.42, loupe = true, sizes = '(max-width: 960px) 92vw, 33vw', eager = false, parallax = false } = Astro.props;
+const a = art[key];
+const t = artText(key, lang);
+const alt = `${t.artist}, ${t.title}${t.year ? `, ${t.year}` : ''}`;
+---
+<figure
+  class:list={['media', { 'has-loupe': loupe }]}
+  style={`--ratio:${ratio};--focus:${a.focus}`}
+  data-reveal="media"
+  data-loupe={loupe ? artSrc(key, 1920) : undefined}
+  data-natural={`${a.w}x${a.h}`}
+>
+  <img
+    src={artSrc(key, 1280)}
+    srcset={artSrcSet(key)}
+    sizes={sizes}
+    alt={alt}
+    loading={eager ? 'eager' : 'lazy'}
+    decoding="async"
+    referrerpolicy="no-referrer"
+    data-parallax={parallax ? '' : undefined}
+  />
+  {loupe && <span class="loupe" aria-hidden="true"></span>}
+  <figcaption class="media__label">
+    {t.artist}, <i>{t.title}</i>{t.year && <>, {t.year}</>}
+  </figcaption>
+</figure>

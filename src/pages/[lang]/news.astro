@@ -1,0 +1,27 @@
+---
+// News — the Figma "Aktuelles" frame is still empty; the upcoming Academy event is the first item.
+import Base from '../../layouts/Base.astro';
+import PageHead from '../../components/PageHead.astro';
+import IntroRow from '../../components/IntroRow.astro';
+import EventCard from '../../components/EventCard.astro';
+import { getContent, staticLangPaths, type Locale } from '../../i18n';
+
+export function getStaticPaths() {
+  return staticLangPaths();
+}
+const lang = Astro.params.lang as Locale;
+const c = getContent(lang);
+---
+<Base lang={lang} page="news" title={c.news.title} description={c.news.text}>
+  <PageHead title={c.news.title} index="06" section={c.nav.about} seed="news">
+    <IntroRow label={c.news.label}>
+      <p class="lead" data-reveal="lines">{c.news.text}</p>
+    </IntroRow>
+  </PageHead>
+  <section class="section section--flush-top">
+    <div class="container">
+      <EventCard lang={lang} />
+      <p class="meta center" style="margin-top:clamp(72px,8vw,120px)" data-reveal="fade">{c.news.more}</p>
+    </div>
+  </section>
+</Base>

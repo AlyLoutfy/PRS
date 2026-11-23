@@ -1,0 +1,16 @@
+---
+// Photograph from the Figma file in its design slot (660 × 468 on the homepage), with clip reveal + parallax.
+import { photos, photoSrcSet, type PhotoKey } from '../data/photos';
+import type { Locale } from '../i18n';
+interface Props {
+  photo: PhotoKey;
+  lang: Locale;
+  ratio?: number;
+  sizes?: string;
+}
+const { photo, lang, ratio = 660 / 468, sizes = '(max-width: 960px) 92vw, 46vw' } = Astro.props;
+const p = photos[photo];
+---
+<figure class="media" style={`--ratio:${ratio};--focus:${p.focus}`} data-reveal="media">
+  <img src={p.src} srcset={photoSrcSet(photo)} sizes={sizes} alt={p.alt[lang]} width={p.w} height={p.h} loading="lazy" decoding="async" data-parallax />
+</figure>

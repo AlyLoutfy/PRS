@@ -1,0 +1,15 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHead from '../components/PageHead.astro';
+import Pill from '../components/Pill.astro';
+import { href } from '../i18n';
+---
+<Base lang="de" page="" title="404">
+  <PageHead title="404" index="404" section="Seite nicht gefunden · Page not found · Página no encontrada" seed="404">
+    <div style="display:flex;gap:12px;flex-wrap:wrap">
+      <Pill href={href('de')} label="Startseite" />
+      <Pill href={href('en')} label="Home" />
+      <Pill href={href('es')} label="Inicio" />
+    </div>
+  </PageHead>
+</Base>

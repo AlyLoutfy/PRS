@@ -1,0 +1,33 @@
+---
+import { getContent, href, type Locale } from '../i18n';
+import { offices, EMAIL, telHref } from '../data/offices';
+
+interface Props { lang: Locale }
+const { lang } = Astro.props;
+const c = getContent(lang);
+---
+<footer class="site-footer">
+  <div class="container">
+    <p class="site-footer__claim" data-reveal="lines">{c.footer.claim} <span>{c.footer.claimSub}</span></p>
+    <div class="grid footer-offices">
+      {offices.map((o) => (
+        <section class="footer-office" data-reveal="fade">
+          <h3>{c.footer.offices[o.key]}</h3>
+          {o.address && o.address.map((line) => <div>{line}</div>)}
+          {o.address && <div>{c.ui.countries[o.key]}</div>}
+          <div><a href={telHref(o.phone)}>T {o.phone}</a></div>
+          <div><a href={`mailto:${EMAIL}`}>{EMAIL}</a></div>
+        </section>
+      ))}
+    </div>
+    <div class="footer-bottom">
+      <span>{c.footer.copyright}</span>
+      <nav aria-label="Legal">
+        <a href={href(lang, 'legal', 'imprint')}>{c.footer.imprint}</a>
+        <a href={href(lang, 'legal', 'privacy')}>{c.footer.privacy}</a>
+        <a href={href(lang, 'legal', 'credits')}>{c.footer.credits}</a>
+        <a href="https://www.linkedin.com/" rel="noopener" target="_blank" data-todo="PRS LinkedIn URL">{c.footer.linkedin}</a>
+      </nav>
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,39 @@
+---
+// Figma "Unsere Kunden" (677:56): three quotes in Suisse B3 with 16 px attribution, sage arrow buttons,
+// then the client logos exported from the file (Swiss Re, Munich Re, Zurich, Allianz, helvetia).
+import { getContent, type Locale } from '../i18n';
+import { withBase } from '../lib/url';
+interface Props { lang: Locale; withClients?: boolean; withQuotes?: boolean }
+const { lang, withClients = true, withQuotes = true } = Astro.props;
+const c = getContent(lang);
+const clients = [
+  { name: 'Swiss Re', file: 'swiss-re' },
+  { name: 'Munich Re', file: 'munich-re' },
+  { name: 'Zurich', file: 'zurich' },
+  { name: 'Allianz', file: 'allianz' },
+  { name: 'Helvetia', file: 'helvetia' },
+];
+---
+{withQuotes && (
+  <div class="quotes" data-quotes tabindex="-1">
+    {c.testimonials.map((t) => (
+      <figure class="quote" data-reveal="fade">
+        <blockquote class="quote__text">“{t.quote}”</blockquote>
+        <figcaption class="quote__who">{t.name}, {t.role}</figcaption>
+      </figure>
+    ))}
+  </div>
+  <div class="quotes-nav">
+    <button class="round-btn" type="button" data-quotes-prev aria-label={c.ui.prev}>
+      <img src={withBase('/icons/chevron.svg')} width="6.5" height="11.5" alt="" />
+    </button>
+    <button class="round-btn round-btn--next" type="button" data-quotes-next aria-label={c.ui.next}>
+      <img src={withBase('/icons/chevron.svg')} width="6.5" height="11.5" alt="" />
+    </button>
+  </div>
+)}
+{withClients && (
+  <div class:list={['clients', { 'clients--solo': !withQuotes }]} data-reveal="fade">
+    {clients.map((cl) => <img class="client" src={withBase(`/clients/${cl.file}.png`)} alt={cl.name} loading="lazy" decoding="async" />)}
+  </div>
+)}

@@ -285,9 +285,16 @@ export function initHero(section: HTMLElement, opts: { reduced: boolean; quick: 
   // The <img> underneath is the design's hero; without WebGL (or with reduced motion) it simply stays visible.
   const useFallback = () => { canvas.style.display = 'none'; };
   if (opts.reduced) { useFallback(); return none; }
+  // Devices that ask to save data, or have very little memory or a single/dual core, keep the photograph.
+  const nav = navigator as Navigator & { connection?: { saveData?: boolean }; deviceMemory?: number };
+  if (nav.connection?.saveData || (nav.deviceMemory ?? 8) <= 2 || (nav.hardwareConcurrency ?? 8) <= 2) { useFallback(); return none; }
 
   const gl = canvas.getContext('webgl2', { antialias: false, alpha: false, depth: false, stencil: false, powerPreference: 'high-performance' });
   if (!gl) { useFallback(); return none; }
+  // No graphics acceleration (WebGL drawn by the processor): a full-screen shader would freeze the page.
+  const info = gl.getExtension('WEBGL_debug_renderer_info');
+  const renderer = info ? String(gl.getParameter(info.UNMASKED_RENDERER_WEBGL)) : '';
+  if (/swiftshader|llvmpipe|softpipe|software|basic render/i.test(renderer)) { useFallback(); return none; }
 
   const program = (fsSrc: string) => {
     const mk = (type: number, src: string) => {

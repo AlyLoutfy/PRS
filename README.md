@@ -87,8 +87,9 @@ v2 has its own `astro.config.mjs` and shares the root `node_modules`.
 
 **Every screen**
 - Written mobile-first; checked from 280 px (folded phones) to 3440 px, portrait and landscape, in all three languages.
-- Safe areas (notch, home indicator), touch targets of at least 44 px, no hover-only information (painting labels are
-  always visible on touch screens), 16 px form text (no zoom on iOS), long German compounds hyphenate.
+- Safe areas (notch, home indicator), 44 px touch targets for buttons, list links and form controls, no hover-only
+  information (painting labels are always visible on touch screens), 16 px form text (no zoom on iOS), long German
+  compounds hyphenate.
 - Phones get their own layouts where columns do not fit: figures as rows, service cards as rows on tablets, the search
   as a full-screen sheet, offices in one column.
 - The contact globe no longer traps vertical scrolling on touch screens; tapping an office turns the globe to it.
@@ -97,14 +98,31 @@ v2 has its own `astro.config.mjs` and shares the root `node_modules`.
 - Header and menu choreography, line-by-line headlines, drawn hairlines and contours, picture reveals with parallax,
   count-up figures, filtered lists that glide into place (GSAP Flip), a carousel with snap, form feedback (underline
   sweep, check marks, drawn success icon), magnetic primary buttons for mouse users.
-- The WebGL hero measures its first frames and lowers its resolution, or hands over to the photograph, on slow devices.
+- The WebGL hero is skipped on devices without graphics acceleration, with little memory or in data-saver mode; on
+  the others it measures its first frames and lowers its resolution, or hands over to the photograph, if they are slow.
 
 **Under the hood**
 - Paintings are **self-hosted** (`v2/public/art/`, WebP in three widths) instead of hot-linked from Wikimedia.
+- Photographs, portraits and logos come in sizes that fit the screen (`v2/scripts/optimize-images.mjs`); the logo
+  mask is 17 kB instead of 43 kB.
 - Text contrast meets WCAG AA (meta grey, green and error colours were adjusted); headings follow one outline per
   page; definition lists, landmarks and labels are in place; print and Windows high-contrast styles exist.
 - Web fonts are preloaded and have metric-matched fallbacks, so text does not jump when they arrive.
 - Social preview image (`v2/public/og.jpg`), canonical and `hreflang` links.
+
+### How v2 was checked
+
+Automated, in Chromium with device emulation (a pass on real iOS Safari and Firefox is still worth doing):
+
+- Layout: all 10 pages × 3 languages × 17 screen sizes from 280 × 653 to 3440 × 1440 (510 combinations) — no
+  horizontal overflow, no broken images, no script errors.
+- Accessibility: axe-core (WCAG 2.1 A/AA and best practices) on every page in all three languages at phone and
+  desktop size, plus the open menu, the open search and the form with errors — no violations. Keyboard-only walk
+  through header, menu, search and form; content and form also work with JavaScript switched off.
+- Interactions: menu, search, form validation, the e-mail fallback, the backend path against a test endpoint
+  (success, server error, bot trap), curriculum selection, filters, upcoming-event notice.
+- Lighthouse (phone profile): accessibility, best practices and SEO 100 on the pages tested; performance 90 on the
+  home page and 94–97 on inner pages (the test machine has no graphics acceleration, so the hero shows its photograph).
 
 ## Enquiry form (v2)
 

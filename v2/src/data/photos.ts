@@ -46,4 +46,12 @@ export const photos = {
 export type PhotoKey = keyof typeof photos;
 export const PHOTO_CREDIT = 'Timothé Beuret';
 
-export const photoSrcSet = (key: PhotoKey) => `${photos[key].small} 960w, ${photos[key].mid} 1280w, ${photos[key].src} ${photos[key].w}w`;
+/** 720 · 960 · 1280 · (hero: 1600) · full — see scripts/optimize-images.mjs */
+export const photoSrcSet = (key: PhotoKey) =>
+  [
+    `${withBase(`/photos/${key}-720.webp`)} 720w`,
+    `${photos[key].small} 960w`,
+    `${photos[key].mid} 1280w`,
+    ...(key === 'hero' ? [`${withBase('/photos/hero-1600.webp')} 1600w`] : []),
+    `${photos[key].src} ${photos[key].w}w`,
+  ].join(', ');

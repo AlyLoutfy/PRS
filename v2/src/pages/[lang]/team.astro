@@ -44,7 +44,16 @@ const shy = (s: string) => s.replace('Verwaltungsratspräsident', 'Verwaltungsra
             <article class="person" id={slug(p.name)} data-filter-item data-country={p.country}>
               <div class="person__portrait" data-reveal="media">
                 {p.photo ? (
-                  <img src={withBase(`/team/${p.photo}.webp`)} width="720" height="720" alt={p.name} loading="lazy" decoding="async" sizes="(min-width: 1024px) 24vw, (min-width: 640px) 32vw, 46vw" />
+                  <img
+                    src={withBase(`/team/${p.photo}.webp`)}
+                    srcset={`${withBase(`/team/${p.photo}-360.webp`)} 360w, ${withBase(`/team/${p.photo}.webp`)} 720w`}
+                    sizes="(min-width: 1440px) 320px, (min-width: 1024px) 23vw, (min-width: 640px) 31vw, 46vw"
+                    width="720"
+                    height="720"
+                    alt={p.name}
+                    loading="lazy"
+                    decoding="async"
+                  />
                 ) : (
                   <>
                     <svg viewBox="0 0 300 300" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
